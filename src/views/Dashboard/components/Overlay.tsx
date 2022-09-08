@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Button, Icon } from "brainly-style-guide";
 
 import locales from "@locales";
-import { HideElement } from "@utils/ElementsVisibility";
+//import { HideElement } from "@utils/ElementsVisibility";
 
 export default class Overlay extends React.Component<{ children: React.ReactNode }> {
   render() {
@@ -15,7 +15,9 @@ export default class Overlay extends React.Component<{ children: React.ReactNode
   }
 
   private static CloseOverlay() {
-    HideElement(document.querySelector(".overlay"));
+    let overlay: HTMLDivElement = document.querySelector(".overlay");
+
+    overlay.hidden = true;
     document.body.style.overflow = "auto";
   }
 }

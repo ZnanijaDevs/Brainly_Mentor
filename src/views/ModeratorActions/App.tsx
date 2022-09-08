@@ -1,153 +1,82 @@
-import React from "react";
-import { Flex, Button, Headline, Spinner } from "brainly-style-guide";
+import clsx from "clsx";
+import { useState, useEffect } from "react";
+import { Flex, Logo, Button, Icon } from "brainly-style-guide";
+import { ErrorBoundary } from "@sentry/react";
 
-import type { Action, MenteeCommonData, Mentor } from "@typings";
-import locales from "@locales";
+import GetActions from "@brainly/GetActions";
+import type { GetActionsDataType } from "@typings";
+import getUserId from "./getUserId";
 
-import ActionContainer from "./components/ActionContainer";
-import AppHeader from "./components/AppHeader";
-import GetActions from "@lib/api/brainly/GetActions";
-import _API from "@lib/api/extension";
-import { Flash } from "@utils/Flashes";
+import ActionsPagination from "./components/pagination/ActionsPagination";
+import ActionsContainer from "./components/actions/ActionsContainer";
+import SelectWithMentees from "./components/common/SelectWithMentees";
+import ModeratorAvatar from "./components/common/ModeratorAvatar";
+import ErrorContainer from "./ErrorContainer";
 
-type AppState = {
-  userId: number;
-  currentPageId: number;
-  nextPageId?: number;
-  error?: string;
-  actions: Action[];
-  loading: boolean;
-  hasMore: boolean;
-  mentees: MenteeCommonData[];
-  me: Mentor;
-}
+export default function App() {
+  const [actions, setActions] = useState<GetActionsDataType>(null);
+  const [error, setError] = useState<Error>(null);
 
-export default class App extends React.Component {
-  state: AppState = {
-    userId: +window.location.href.match(/(?<=view_moderator\/)\d+/),
-    currentPageId: +window.location.href.match(/(?<=\/page:)\d+$/) || 1,
-    nextPageId: null,
-    actions: [],
-    error: null,
-    loading: true,
-    hasMore: true,
-    mentees: [],
-    me: null
+  const [pageId, setPageId] = useState(
+    +window.location.href.match(/(?<=\/page:)\d+$/) || 1
+  );
+
+  const fetchActions = (_pageId: number) => {
+    if (actions) setActions(null);
+
+    const userId = getUserId();
+
+    GetActions(userId, _pageId)
+      .then(data => {
+        setActions(data);
+
+        const newURL = `/moderation_new/view_moderator/${userId}/page:${_pageId}`;
+        window.history.pushState(null, null, newURL);
+
+        if (error) setError(null);
+      })
+      .catch(err => setError(err));
   };
 
-  constructor(props) {
-    super(props);
+  useEffect(() => fetchActions(pageId), []);
+  useEffect(() => {
+    if (actions) setPageId(actions.pageId);
+  }, [actions]);
 
-    this.SetPageSwitcher();
-  }
+  if (error) return (
+    <ErrorContainer error={error} onTryAgain={() => {
+      setError(null);
+      fetchActions(pageId);
+    }} /> 
+  );
 
-  componentDidMount() {
-    this.FetchUsers();
-    this.FetchActions();
-  }
-
-  private SetPageSwitcher() {
-    document.addEventListener("keyup", (event: KeyboardEvent) => {
-      if (this.state.loading) return;
-
-      let pageId = this.state.currentPageId;
-
-      if (
-        pageId > 1 &&
-        (event.code === "ArrowLeft" || event.code === "KeyA")
-      )
-        this.FetchActions(--pageId);
-      else if (
-        this.state.hasMore &&
-        (event.code === "ArrowRight" || event.code === "KeyD")
-      )
-        this.FetchActions(++pageId);
-
-    });
-  }
-
-  private async FetchUsers() {
-    try {
-      const [menteesData, meData] = await Promise.all([
-        _API.GetMenteesWithoutStats(),
-        _API.GetMe()
-      ]);
-
-      this.setState({
-        mentees: menteesData.mentees,
-        me: meData.mentor,
-      });
-    } catch (err) {
-      Flash({
-        type: "error",
-        text: err.message
-      });
-    }
-  }
-
-  private async FetchActions(pageId?: number) {
-    if (!pageId) pageId = this.state.currentPageId;
-
-    this.setState({ error: null, loading: true });
-
-    try {
-      const moderatorId = this.state.userId;
-      const data = await GetActions(moderatorId, pageId);
-
-      this.setState({
-        currentPageId: data.pageId,
-        hasMore: data.hasMore,
-        nextPageId: pageId + 1,
-        actions: data.actions
-      });
-
-      const newURL = `/moderation_new/view_moderator/${moderatorId}/page:${pageId}`;
-      window.history.pushState(null, null, newURL);
-
-    } catch (err) {
-      console.error(err);
-      this.setState({ error: err.message });
-    } finally {
-      this.setState({ loading: false });
-    }
-  }
-
-  render() {
-    if (this.state.error) {
-      return (
-        <Flex className="js-react-error-container">
-          <Headline color="text-red-60" extraBold size="medium">{this.state.error}</Headline>
-          <Button onClick={_ => this.FetchActions()}
-            type="outline">{locales.common.tryAgain}</Button>
-        </Flex>
-      );
-    }
-
-    return (
-      <div className="layout">
-        <Flex direction="column">
-          <AppHeader
-            onChange={(pageId) => this.FetchActions(pageId)}
-            loading={this.state.loading}
-            pageId={this.state.currentPageId}
-            hasNextPage={this.state.hasMore}
-            mentees={this.state.mentees}
-            userId={this.state.userId}
-            me={this.state.me}
-          />
-          {(!this.state.actions.length && !this.state.nextPageId) ?
-            <Spinner /> :
-            <div className="actions grid-items-container">{this.state.actions.map(action =>
-              <ActionContainer
-                key={action.hash}
-                data={action}
-                moderator={this.state.userId}
-                page={this.state.currentPageId}
-              />
-            )}</div>
-          }
-        </Flex>
-      </div>
-    );
-  }
+  return (
+    <div id="layout">
+      <ErrorBoundary fallback={({ error, resetError }) => (
+        <ErrorContainer error={error} onTryAgain={resetError} />
+      )}>
+        <header>
+          <Flex justifyContent="space-between" alignItems="center">
+            <Logo type="znanija" onClick={() => window.location.href = "/"} />
+            <ActionsPagination 
+              disabled={actions === null}
+              hasMorePages={actions?.hasMore} 
+              pageId={pageId} 
+              onChange={fetchActions} 
+            />
+            <Flex alignItems="center">
+              <ModeratorAvatar />
+              <SelectWithMentees />
+              <Button type="solid-indigo" icon={<Icon type="verified" color="icon-white" />} iconOnly />
+            </Flex>
+          </Flex>
+        </header>
+        <main>
+          <div id="actions-grid-container" className={clsx(!actions && "centered-container")}>
+            <ActionsContainer actions={actions?.actions} />
+          </div>
+        </main>
+      </ErrorBoundary>
+    </div>
+  );
 }

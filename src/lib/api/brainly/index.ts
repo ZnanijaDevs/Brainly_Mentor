@@ -8,27 +8,28 @@ import type {
 } from "@typings/brainly";
 
 class BrainlyApi {
-  private graphqlURL = `https://${locales.marketHost}/graphql/${locales.market}`;
-  private legacyApiURL = `https://${locales.marketHost}/api/28`;
-  private tokenLong: string;
+  private graphqlPath = "/graphql/ru";
+  private legacyApiPath = "/api/28";
+
+  private readonly userToken: string;
 
   constructor() {
-    this.SetAuthToken();
+    this.userToken = document.cookie
+      .split("; ")
+      .find(cookie => /\[Token\]\[Long\]/.test(cookie))
+      ?.split("=")
+      ?.pop();
   }
 
-  private SetAuthToken() {
-    let cookie = document.cookie.split("; ").find(cookie => /\[Token\]\[Long\]/i.test(cookie));
-    this.tokenLong = cookie?.split("=")?.pop();
-  }
-
-  private async LegacyApiReq<T>(
+  private async Legacy<T>(
     method: "GET" | "POST",
     apiMethod: string,
     body?
   ): Promise<CommonResponse<T>> {
-    const res = await fetch(`${this.legacyApiURL}/${apiMethod}`, {
+    const res = await fetch(`${this.legacyApiPath}/${apiMethod}`, {
       method,
-      body: method === "GET" ? null : JSON.stringify(body)
+      body: method === "GET" ? null : JSON.stringify(body),
+      credentials: "include"
     }).then(data => data.json());
 
     if (!res.success) throw Error(res.message || locales.errors.brainlyError);
@@ -36,40 +37,53 @@ class BrainlyApi {
     return res;
   }
 
-  public async GQL(
-    query: string, 
-    variables?
-  ) {
-    return await fetch(this.graphqlURL, {
+  async GQL(query: string) {
+    const r = await fetch(this.graphqlPath, {
       method: "POST",
-      body: JSON.stringify({ query, variables }),
+      body: JSON.stringify({ query }),
       headers: {
-        "Content-Type": "application/json; charset=utf-8",
-        "X-B-Token-Long": this.tokenLong
+        "X-B-Token-Long": this.userToken,
+        "Content-Type": "application/json"
       }
-    }).then(data => data.json());
+    })
+      .then(res => res.json());
+
+    if ("errors" in r) {
+      console.error(r);
+
+      throw Error(locales.errors.brainlyError);
+    }
+
+    return r;
   }
 
-  /* eslint-disable camelcase, max-len */
-  public async GetDM(userId: number): Promise<GetMessagesResponse> {
-    const conversation: GetConversationResponse = await this.LegacyApiReq(
+  /* eslint-disable max-len */
+  async GetDM(userId: number): Promise<GetMessagesResponse> {
+    const conversation: GetConversationResponse = await this.Legacy(
       "POST", 
       "api_messages/check", 
       { user_id: userId }
     );
 
-    return await this.LegacyApiReq(
+    return await this.Legacy(
       "GET", 
       `api_messages/get_messages/${conversation.data.conversation_id}`
     );
   }
 
-  public async GetQuestion(id: number): Promise<GetQuestionResponse> {
-    return await this.LegacyApiReq("GET", `api_tasks/main_view/${id}`);
+  async GetQuestion(id: number): Promise<GetQuestionResponse> {
+    return await this.Legacy("GET", `api_tasks/main_view/${id}`);
   }
 
-  public async GetQuestionLog(id: number): Promise<GetQuestionLogResponse> {
-    return await this.LegacyApiReq("GET", `api_task_lines/big/${id}`);
+  async GetQuestionLog(id: number): Promise<GetQuestionLogResponse> {
+    return await this.Legacy("GET", `api_task_lines/big/${id}`);
+  }
+
+  async GetModerationItems(): Promise<CommonResponse> {
+    return await this.Legacy("POST", "moderation_new/index", {
+      category_id: 0,
+      subject_id: 0
+    });
   }
 }
 

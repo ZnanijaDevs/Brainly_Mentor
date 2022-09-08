@@ -1,7 +1,7 @@
-import BrainlyApi from "@lib/api/brainly";
+import BrainlyApi from "@brainly/index";
 import storage from "@lib/storage";
 import locales from "@locales";
-import { Flash } from "@utils/Flashes";
+import flash from "@utils/flashes";
 
 storage.get(`authToken_${locales.market}`).then(async function(token) {
   if (token) return;
@@ -25,23 +25,12 @@ storage.get(`authToken_${locales.market}`).then(async function(token) {
     
     if (!mentorToken) throw Error(locales.errors.couldNotFindAuthTokenInDM);
 
-    await storage.set(`authToken_${locales.market}`, mentorToken);
+    await storage.set({ [`authToken_${locales.market}`]: mentorToken });
 
-    Flash({
-      type: "success",
-      text: locales.common.youHaveBeenAuthorized,
-      withIcon: true
-    });
+    flash("success", locales.common.youHaveBeenAuthorized);
 
     window.location.reload();
-
   } catch (err) {
-    Flash({
-      type: "info",
-      sticky: true,
-      text: `${locales.errors.couldNotAuthorizeYou}: ${err.message}`,
-      withIcon: true
-    });
+    flash("info", `${locales.errors.couldNotAuthorizeYou}: ${err.message}`);
   }
-
 });

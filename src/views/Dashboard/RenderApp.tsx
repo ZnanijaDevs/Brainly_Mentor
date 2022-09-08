@@ -1,9 +1,8 @@
-import ReactDOM from "react-dom/client";
-import Dashboard from "./Dashboard";
+import { createRoot } from "react-dom/client";
+import Modal from "./Modal";
 
-export default function RenderApp() {
-  const overlay = document.querySelector(".overlay");
+export default (rootElement: HTMLElement) => {
+  const root = createRoot(rootElement);
 
-  ReactDOM.createRoot(overlay)
-    .render(<Dashboard />);
-}
+  root.render(<Modal />);
+};

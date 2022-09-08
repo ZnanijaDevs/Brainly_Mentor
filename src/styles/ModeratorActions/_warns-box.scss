@@ -1,7 +1,4 @@
-@import "../mixins";
-
 .warnsBox {
-  /* stylelint-disable-next-line declaration-no-important */
   position: absolute !important;
   margin-left: 40px;
   z-index: 8;
@@ -38,6 +35,11 @@
       width: 30px;
       height: 30px;
 
+      &--hover::before {
+        transform: unset;
+        background-color: transparent;
+      }
+
       > .sg-icon {
         height: 16px;
         width: 16px;
@@ -52,8 +54,16 @@
 
   & .ban-active {
     background: #fdacac;
-    padding: 4px 10px;
     border-radius: 8px;
+    padding: 5px 10px;
+
+    > * {
+      line-height: 1;
+    }
+
+    > span:last-child {
+      font-size: 14px;
+    }
   }
 
   &--to-left {

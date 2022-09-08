@@ -48,8 +48,9 @@
 
     & > .close-modal-button.sg-button {
       position: absolute;
-      right: 2%;
       z-index: 12;
+      right: 0.5%;
+      top: 3%;
 
       & svg {
         color: #000;
@@ -57,7 +58,6 @@
     }
 
     & .error-container-with-image {
-      /* stylelint-disable-next-line declaration-no-important */
       overflow: hidden !important;
 
       > .sg-headline {

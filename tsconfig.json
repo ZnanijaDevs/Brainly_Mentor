@@ -13,10 +13,11 @@
       "@typings*": ["typings*", "typings"],
       "@lib/*": ["./lib/*"],
       "@utils/*": ["./utils/*"],
-      "@assets/*": ["./assets/*"]
+      "@assets/*": ["./assets/*"],
+      "@brainly/*": ["./lib/api/brainly/*"]
     },
     "lib": ["ES5", "ES6", "DOM", "DOM.Iterable"]
   },
-  "exclude": ["node_modules", "build"],
+  "exclude": ["node_modules", "build", ".vscode"],
   "include": ["src"]
 }

@@ -1,5 +1,6 @@
 import locales from "@locales";
 import moment from "moment";
+import GetPage from "./GetPage";
 
 export interface UserBanDetails {
   banCount: number;
@@ -13,15 +14,8 @@ export interface UserBanDetails {
   }
 }
 
-export default async function (userId: number): Promise<UserBanDetails> {
-  const res = await fetch(`
-    ${locales.marketURL}/${locales.profilePath}/__nick__-${userId}
-  `);
-
-  if (res.status === 410) throw Error(locales.errors.accountDeleted);
-
-  let profileHTML = await res.text();
-  let doc = new DOMParser().parseFromString(profileHTML, "text/html");
+export default async (userId: number): Promise<UserBanDetails> => {
+  const doc = await GetPage(`/profil/__nick__-${userId}`);
 
   const modPanel = doc.querySelector(".mod-profile-panel");
   const cancelBanElement = doc.querySelector(`a[href^="/bans/cancel"]`)
@@ -61,4 +55,4 @@ export default async function (userId: number): Promise<UserBanDetails> {
   banDetails.banCount = banCount;
 
   return banDetails;
-}
+};

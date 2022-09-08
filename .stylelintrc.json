@@ -12,7 +12,8 @@
     }],
     "selector-class-pattern": null,
     "block-opening-brace-space-before": "always",
-    "declaration-no-important": true
+    "declaration-no-important": null,
+    "no-descending-specificity": null
   },
   "ignoreFiles": ["./build"]
 }

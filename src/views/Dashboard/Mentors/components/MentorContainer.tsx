@@ -75,7 +75,6 @@ export default class MentorContainer extends React.Component<MentorContainerProp
             </Flex>
           </Flex>
         </Flex>
-        <Checkbox defaultChecked={mentor.senior} onChange={this.editSenior}>{locales.common.senior}</Checkbox>
         <SeparatorHorizontal className="sg-flex--margin-xs" />
         <Flex justifyContent="space-between">
           <Headline>
@@ -110,3 +109,4 @@ export default class MentorContainer extends React.Component<MentorContainerProp
     );
   }
 }
+//<Checkbox defaultChecked={mentor.senior} onChange={this.editSenior}>{locales.common.senior}</Checkbox>

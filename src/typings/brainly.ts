@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 export interface QuestionLogEntry {
   class: 
     | "accepted"
@@ -160,7 +158,7 @@ export interface User {
   ranks_ids: number[];
 }
 
-export type CommonResponse<T = void> = {
+export type CommonResponse<T = unknown> = {
   success: true;
   users_data?: User[];
   data: T;

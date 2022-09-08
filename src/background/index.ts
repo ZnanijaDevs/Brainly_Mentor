@@ -3,6 +3,8 @@ import type {
 } from "@typings/extension";
 import ext from "webextension-polyfill";
 
+import "./updateExtensionConfigs";
+
 class BackgroundListener {
   private tabId: number;
   private messageData;

@@ -66,7 +66,9 @@ export class AddMentorBox extends React.Component<
   }
 
   render() {
-    return (
+    //TODO: this
+    return <div />;
+    /*return (
       <Flex direction="column" className="add-mentor-box">
         <Headline extraBold color="text-green-60">{locales.common.addMentor}</Headline>
         <Flex fullWidth marginTop="s" marginBottom="xs" alignItems="center" className="sg-flex--gap-s">
@@ -82,6 +84,6 @@ export class AddMentorBox extends React.Component<
         {this.state.error && 
           <Text color="text-red-60" weight="bold" size="medium" align="to-center">{this.state.error}</Text>}
       </Flex>
-    );
+    );*/
   }
 }

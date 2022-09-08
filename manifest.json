@@ -1,32 +1,23 @@
 {
-  "author": "andrewss <andrewss.krlv@gmail.com> & vov44k",
   "name": "__MSG_name__",
   "description": "__MSG_description__",
   "manifest_version": 3,
-  "default_locale": "en",
+  "default_locale": "ru",
   "icons": {
     "128": "icons/icon.png"
   },
   "action": {
     "default_icon": "icons/icon.png"
   },
-  "host_permissions": [
-    "*://znanija.com/*",
-    "*://brainly.com/*",
-    "*://nosdevoirs.fr/*"
-  ],
+  "host_permissions": ["*://znanija.com/*"],
   "permissions": ["storage", "scripting"],
   "web_accessible_resources": [{
     "matches": ["<all_urls>"],
     "resources": ["styles/*", "content-scripts/*", "icons/*"]
   }],
   "content_scripts": [{
-    "matches": [
-      "*://znanija.com/*", 
-      "*://brainly.com/*",
-      "*://nosdevoirs.fr/*"
-    ],
-    "js": ["content-scripts/contentScript.js"],
+    "matches": ["*://znanija.com/*"],
+    "js": ["content-scripts/sentry.js", "content-scripts/contentScript.js"],
     "run_at": "document_start"
   }],
   "background": {

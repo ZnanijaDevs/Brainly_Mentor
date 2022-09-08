@@ -20,14 +20,13 @@ a > span[aria-hidden="true"] {
 }
 
 .sg-flex--relative {
-  /* stylelint-disable-next-line declaration-no-important */
   position: relative !important;
 }
 
 .flash-messages-container {
   position: fixed;
   z-index: 10000;
-  top: 4rem;
+  top: 4.5rem;
   width: 100%;
 }
 

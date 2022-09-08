@@ -2,6 +2,6 @@ src/_locales/*
 src/locales/*
 src/assets/*
 src/typings/*.d.ts
-scripts/*.js
-scripts/gulp/*.js
-gulpfile.js
+build-scripts/*.js
+build-dev/
+build-production/

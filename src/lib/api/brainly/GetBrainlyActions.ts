@@ -4,22 +4,18 @@ import type {
 } from "@typings";
 import { GetShortDeleteReason } from "@lib/GetShortDeleteReason";
 import locales from "@locales";
-import md5 from "md5";
+import GetPage from "./GetPage";
 
 const REGEXPS = locales.regexps;
-const ERRORS = locales.errors;
 const LOCALIZED_TYPES = locales.localizedActionTypes;
 
-export default async function GetBrainlyActions(userId: number, pageId: number): Promise<
-  GetActionsDataType
-> {
-  let url = `${locales.marketURL}/moderation_new/view_moderator/${userId}/page:${pageId}`;
-  let res = await fetch(url);
-
-  if (res.status !== 200) throw Error(ERRORS.brainlyError);
-
-  const htmlData = await res.text();
-  const doc = new DOMParser().parseFromString(htmlData, "text/html");
+export default async function GetBrainlyActions(
+  userId: number, 
+  pageId: number
+): Promise<GetActionsDataType> {
+  const doc = await GetPage(
+    `/moderation_new/view_moderator/${userId}/page:${pageId}`
+  );
 
   const actions: Action[] = [];
 
@@ -98,12 +94,10 @@ export default async function GetBrainlyActions(userId: number, pageId: number):
       action.type === "REPORTED_FOR_CORRECTION" ? "icon-blue-50" : 
         `icon-${action.contentType === "answer" ? "blue" : "indigo"}-50`;
 
-    action.hash = md5(action.content + action.user.id + action.date + action.task.id);
-
     actions.push(action);
   }
 
-  if (!actions.length) throw Error(ERRORS.noActions);
+  if (!actions.length) throw Error(locales.errors.noActions);
 
   let currentPage = doc.querySelector("span.current");
 

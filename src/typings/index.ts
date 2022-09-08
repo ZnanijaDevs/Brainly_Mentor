@@ -14,11 +14,6 @@ export type GetActionsDataType = {
   pageId: number;
 }
 
-export type GetReviewedActionsDataType = {
-  approved: string[];
-  disapproved: string[];
-}
-
 export interface Action {
   task: {
     id: number;
@@ -31,7 +26,7 @@ export interface Action {
     link: string;
     isModerator?: boolean;
     avatar?: string;
-    rank?: {id: number; name: string};
+    rank?: string;
   };
   date: string;
   reason: {
@@ -39,13 +34,11 @@ export interface Action {
     fullText: string;
     shortReason: string;
   };
-  reviewStatus: "APPROVED" | "DISAPPROVED" | "NONE";
   contentType: "answer" | "question" | "comment" | "attachment" | "unknown";
   type: "DELETED" | "ACCEPTED" | "REPORTED_FOR_CORRECTION";
   icon: IconType;
   iconColor: IconPropsType["color"];
   localizedType: string;
-  hash: string;
 }
 
 type MenteeCharts = {
@@ -89,6 +82,8 @@ export interface Mentor {
 
 export interface Candidate {
   id: number;
-  link: string;
+  nick: string;
   status: string;
+  is_inactive: boolean;
+  updated_at: string;
 }

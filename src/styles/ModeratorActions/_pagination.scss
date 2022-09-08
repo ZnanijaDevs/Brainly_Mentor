@@ -1,0 +1,17 @@
+#actions-pagination {
+  gap: 15px;
+
+  &[disabled] {
+    @include disabled(0.5);
+  }
+
+  > .sg-icon {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+
+    &[disabled] {
+      @include disabled(0.5);
+    }
+  }
+}

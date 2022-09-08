@@ -1,56 +1,38 @@
 import BrainlyApi from ".";
-import type {
-  GetActionsDataType,
-  GetReviewedActionsDataType
-} from "@typings";
-import _API from "../extension";
+import type { GetActionsDataType } from "@typings";
 import GetBrainlyActions from "./GetBrainlyActions";
 
 export default async function GetActions(moderatorId: number, pageId: number): Promise<
   GetActionsDataType
 > {
-  let promises: [
-    Promise<GetActionsDataType>,
-    Promise<GetReviewedActionsDataType>
-  ] = [
-    GetBrainlyActions(moderatorId, pageId),
-    _API.GetReviewedActions(moderatorId)
-  ];
-
-  let data = await Promise.all(promises);
-  let actions = data[0].actions;
+  const data = await GetBrainlyActions(moderatorId, pageId);
+  const actions = data.actions;
 
   // Get extra data
-  let extraDataQuery = "";
+  let usersDataQuery = "";
   actions.forEach(action => {
     let userId = action.user.id;
-    let userGlobalId = btoa(`user:${userId}`);
 
-    extraDataQuery += `_${userId}: user(id: "${userGlobalId}") {
-      avatar {thumbnailUrl url}
-      specialRanks {name id}
-      rank {name id}
+    usersDataQuery += `_${userId}: user(id: "${btoa(`user:${userId}`)}") {
+      avatar {thumbnailUrl url} 
+      specialRanks {name id} 
+      rank {name}
     } `;
   });
 
-  let extraData = await BrainlyApi.GQL(`query GetUsers { ${extraDataQuery} }`);
-  let users = Object.keys(extraData.data).map(x => (
-    { ...extraData.data[x], id: +x.replace(/_/, "") }
-  ));
+  let extraData = await BrainlyApi.GQL(`query { ${usersDataQuery} }`);
+
+  let users = Object.keys(extraData.data).map(x => 
+    ({ ...extraData.data[x], id: +x.replace("_", "") })
+  );
 
   for (let action of actions) {
-    action.reviewStatus = data[1].approved.includes(action.hash) ? 
-      "APPROVED" :
-      data[1].disapproved.includes(action.hash) ? 
-        "DISAPPROVED" : 
-        "NONE";
-
     let userData = users.find(user => user.id === action.user.id);
 
     action.user.avatar = userData?.avatar?.url || "";
     action.user.isModerator = !!userData?.specialRanks?.length;
-    action.user.rank = userData?.rank;
+    action.user.rank = userData?.rank?.name || "";
   }
 
-  return data[0];
+  return data;
 }

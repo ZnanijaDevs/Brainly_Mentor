@@ -1,5 +1,4 @@
 import type {
-  Action,
   Mentee, 
   BasicSuccessResponse,
   Mentor,
@@ -13,8 +12,7 @@ import type { ServerConfig } from "@typings/extension";
 const ERRORS = locales.errors;
 
 class Api {
-  private serverUrl = "https://mentors.br-helper.com";
-  private market: string = locales.market;
+  private serverUrl = "https://mentors-v2.br-helper.com";
 
   private extensionConfig: ServerConfig;
 
@@ -31,67 +29,40 @@ class Api {
     return this.serverUrl;
   }
 
-  private async Request(
-    method: "GET" | "POST" | "PUT" | "DELETE",
+  private async Req(
+    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH",
     apiMethod: string,
     body?
   ) {
-    const authToken = await storage.get(`authToken_${locales.market}`);
+    const authToken = await storage.get("token");
     if (!authToken) throw Error(ERRORS.notAuthed);
 
-    let url = `${this.serverURL}/${this.market}/${apiMethod}`;
-    let headers = {
+    const requestUrl = `${this.serverURL}/${apiMethod}`;
+    const requestHeaders = {
       "Authorization": `Bearer ${authToken}`
     };
-    
+
     if (body) {
       body = JSON.stringify(body);
-      headers["Content-Type"] = "application/json; charset=utf-8";
+      requestHeaders["Content-Type"] = "application/json";
     }
 
-    const res = await fetch(url, {
-      method, 
-      body, 
-      headers 
-    }).then(r => r.json());
-    
-    if (res.error) {
-      let errorMessage = ERRORS[res.error || "internalError"];
-
-      throw Error(errorMessage);
-    }
-
-    return res;
-  }
-
-  async GetReviewedActions(mentorId: number): Promise<{
-    approved: string[];
-    disapproved: string[];
-  }> {
-    return await this.Request("GET", `actions/reviewed/${mentorId}`);
-  }
-
-  async ReviewActions(
-    hash: string | string[],
-    moderatorId: number,
-    status: Action["reviewStatus"]
-  ) {
-    let hashList = hash as string[];
-
-    if (typeof hash === "string")
-      hashList = [hash];
-
-    return await this.Request("PUT", "actions/review", { 
-      hashList, 
-      status, 
-      moderatorId 
+    // TODO: handle errors
+    const res = await fetch(requestUrl, {
+      method,
+      body,
+      headers: requestHeaders
     });
+
+    const data = await res.json();
+
+    return data;
   }
 
   async GetMenteesWithoutStats(): Promise<{
     mentees: MenteeCommonData[];
   }> {
-    return await this.Request("GET", "mentees?withoutStats=true");
+    return await this.Req("GET", "mentees?withoutStats=true");
   }
 
   async GetMentees(mentorId?: number): Promise<{
@@ -100,13 +71,13 @@ class Api {
     let path = `mentees`;
     if (mentorId) path += `?id=${mentorId}`;
 
-    return await this.Request("GET", path);
+    return await this.Req("GET", path);
   }
 
   async AddMentee(userId: number, mentorId: number): Promise<{
     mentee: Mentee;
   }> {
-    return await this.Request("POST", "mentees", { 
+    return await this.Req("POST", "mentees", { 
       id: userId,
       mentorId
     });
@@ -115,25 +86,25 @@ class Api {
   async EditMentee(mentorId: number, menteeId: number, data: {
     note: string;
   }): Promise<BasicSuccessResponse> {
-    return await this.Request("PUT", `mentees/${mentorId}/${menteeId}`, data);
+    return await this.Req("PUT", `mentees/${mentorId}/${menteeId}`, data);
   }
 
   async DeleteMentee(mentorId: number, userId: number): Promise<BasicSuccessResponse> {
-    return await this.Request("DELETE", `mentees/${mentorId}/${userId}`);
+    return await this.Req("DELETE", `mentees/${mentorId}/${userId}`);
   }
 
   async GetMentors(): Promise<{ mentors: Mentor[] }> {
-    return await this.Request("GET", "mentors");
+    return await this.Req("GET", "mentors");
   }
 
   async GetCommonMentorsData(): Promise<{
     mentors: {id: number; nick: string}[]
   }> {
-    return await this.Request("GET", "mentors?includeMentees=false");
+    return await this.Req("GET", "mentors?includeMentees=false");
   }
 
   async GetMe(): Promise<{ mentor: Mentor }> {
-    return await this.Request("GET", "mentors/me");
+    return await this.Req("GET", "mentors/me");
   }
 
   async AddMentor(data: {
@@ -142,34 +113,41 @@ class Api {
   }): Promise<{
     mentor: Mentor
   }> {
-    return await this.Request("POST", "mentors", data);
+    return await this.Req("POST", "mentors", data);
   }
 
   async DeleteMentor(mentorId: number): Promise<BasicSuccessResponse> {
-    return await this.Request("DELETE", `mentors/${mentorId}`);
+    return await this.Req("DELETE", `mentors/${mentorId}`);
   }
 
   async EditMentor(mentorId: number, data: {
     senior: boolean;
   }): Promise<BasicSuccessResponse> {
-    return await this.Request("PUT", `mentors/${mentorId}`, data);
+    return await this.Req("PUT", `mentors/${mentorId}`, data);
   }
 
-  async GetCandidates(id?: number): Promise<{
+  async GetCandidates(ids: number[]): Promise<{
+    count: number;
+    candidates: Candidate[];
+  }> {
+    return await this.Req("GET", `candidates?ids=${ids.join(",")}`);
+  }
+
+  /* async GetCandidates(id?: number): Promise<{
     candidates: Candidate[];
   }> {
     let path = "candidates";
     if (id) path += `?id=${id}`;
 
-    return await this.Request("GET", path);
+    return await this.Req("GET", path);
   }
 
   async ReviewCandidate(id: number): Promise<{ warnings: string[] }> {
-    return await this.Request("POST", `candidates/review/${id}`);
-  }
+    return await this.Req("POST", `candidates/review/${id}`);
+  }*/
 
   async GetConfig(): Promise<ServerConfig> {
-    return await this.Request("GET", "config.json");
+    return await this.Req("GET", "config.json");
   }
 
 }

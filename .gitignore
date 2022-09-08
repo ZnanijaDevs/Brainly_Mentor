@@ -1,6 +1,9 @@
 node_modules/
 package-lock.json
 .idea/
-build/
+.vscode/components*
+build-*
+!build-scripts
 dist/
 debug.log
+sentry-dsn.*
