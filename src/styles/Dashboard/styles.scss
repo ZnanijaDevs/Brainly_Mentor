@@ -1,5 +1,71 @@
 @import "../basics";
-@import "../grid";
-@import "../overlay";
-@import "./layout";
-@import "./mentee-card";
+@import "../mixins";
+@import "./modal";
+@import "./modal-grid-list";
+@import "./error-container";
+@import "./add-mentor-box";
+
+.open-mentees-dashboard.sg-button {
+  position: fixed;
+  top: 8rem;
+  right: 3.5rem;
+  transition: 0.5s ease;
+
+  &.to-bottom {
+    transform: translate(2.6rem, 2.5rem);
+  }
+
+  @include mobile {
+    top: 4.8rem;
+    right: 0.3rem;
+    z-index: 9000;
+  }
+}
+
+.mentee-box {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.mentor-box {
+  & > div:first-child {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .sg-avatar {
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  a {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__error-container {
+    $red-color: #cf1d00;
+
+    background-color: #fff1f0;
+    margin-top: 8px;
+    border-radius: 5px;
+    padding: 5px;
+
+    @include flex($alignItems: center);
+
+    > .sg-icon {
+      margin-right: 6px;
+      margin-left: 2px;
+      fill: $red-color;
+    }
+
+    > .sg-text {
+      color: $red-color;
+    }
+  }
+}

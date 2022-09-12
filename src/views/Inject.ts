@@ -1,11 +1,26 @@
+/* eslint-disable no-useless-escape */
 import ToBackground from "@lib/ToBackground";
-import type { ServerConfig } from "@typings/extension";
-import _API from "@lib/api/extension";
+
+const SCRIPTS_BY_ROUTES: Record<string, string[]> = {
+  "\/moderation_new\/view_moderator\/\\d+": [
+    "ModeratorActions/index.js", 
+    "ModeratorActions/style.css"
+  ],
+  "\/profil\/[A-Za-z0-9]+-\\d+": ["UserProfile/index.js", "UserProfile/style.css"],
+  "\/$|\/(subject|predmet)\/": ["HomePage/index.js", "HomePage/style.css"],
+  "(\/$)|(\/task\/\\d+)|(\/subject\/\\w+)": [
+    "Core/index.js",
+    "Dashboard/index.js",
+    "Dashboard/style.css"
+  ]
+};
 
 class Core {
   private path = window.location.href;
 
-  private Path(pattern: RegExp): boolean {
+  private Path(pattern: RegExp | string): boolean {
+    if (typeof pattern === "string") pattern = new RegExp(pattern);
+
     return pattern.test(this.path);
   }
 
@@ -13,58 +28,15 @@ class Core {
     this.InjectContent();
   }
 
-  async SetExtensionConfigs() {
-    let config: ServerConfig = {
-      deletionReasons: [],
-      subjects: []
-    };
-
-    try {
-      config = await _API.GetConfig();
-    } catch (err) {
-      console.error("Failed to fetch the extension config. Maybe not logged in?", err);
-    }
-
-    localStorage.setItem("BRAINLY_MENTOR_EXTENSION_CONFIG", JSON.stringify(config));
-  }
-
   async InjectContent() {
-    if (this.Path(/\/moderation_new\/view_moderator\/\d+/)) {
-      this.InjectFiles([
-        "content-scripts/ModeratorActions/index.js",
-        "styles/ModeratorActions/styles.css"
-      ]);//, { oldPage: true, cleanBody: true, loadConfig: true });
-    }
-
-    if (this.Path(/\/profil\/[A-Za-z0-9]+-\d+/)) {
-      this.InjectFiles([
-        "content-scripts/UserProfile/index.js",
-        "styles/UserProfile/styles.css"
-      ]);
-    }
-
-    if (this.Path(/\/$|\/(subject|predmet)\//)) {
-      this.InjectFiles([
-        "content-scripts/HomePage/index.js",
-        "styles/HomePage/styles.css"
-      ]);
-    }
-
-    if (this.Path(/(\/$)|(\/(question|task|devoir)\/\d+)|(\/(subject|matiere)\/\w+)/)) {
-      this.InjectFiles([
-        "content-scripts/Core/index.js",
-        "content-scripts/Dashboard/index.js",
-        "styles/Dashboard/styles.css"
-      ]);
-    }
+    Object.entries(SCRIPTS_BY_ROUTES).forEach(([pathRegex, scripts]) => {
+      if (this.Path(pathRegex)) this.InjectFiles(scripts);
+    });
   }
 
   /** Inject content scripts and CSS */
-  private async InjectFiles(
-    files: string[],
-    //options: FileInjectionOptions = { oldPage: false, cleanBody: false, loadConfig: false }
-  ) {
-    // if (options.loadConfig) await this.SetExtensionConfigs();
+  private async InjectFiles(files: string[]) {
+    files = files.map(file => `content-scripts/${file}`);
 
     const jsFiles = files.filter(file => file.match(/\.js$/));
     const cssFiles = files.filter(file => file.match(/\.css$/));

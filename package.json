@@ -6,17 +6,17 @@
     "production": "webpack build --mode=production",
     "dev": "webpack -w --mode=development",
     "lint:ts": "eslint ./src --ext .ts,.tsx",
-    "lint:scss": "stylelint ./src/**/*.scss"
+    "lint:scss": "stylelint ./src/**/*.scss",
+    "pkg:depcheck": "depcheck",
+    "pkg:upgrade": "npm-upgrade"
   },
   "author": "andrewss & vov44k",
   "license": "MIT",
   "devDependencies": {
-    "@types/md5": "^2.3.2",
     "@types/react-dom": "^18.0.6",
     "@types/webextension-polyfill": "^0.9.0",
     "@typescript-eslint/eslint-plugin": "^5.35.0",
     "@typescript-eslint/parser": "^5.35.0",
-    "babel-loader": "^8.2.5",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",
     "eslint": "^7.32.0",
@@ -33,7 +33,7 @@
     "terser-webpack-plugin": "^5.3.5",
     "ts-loader": "^9.3.1",
     "tsconfig-paths-webpack-plugin": "^4.0.0",
-    "typescript": "^4.7.4",
+    "typescript": "^4.8.3",
     "webextension-polyfill": "^0.10.0",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0",
@@ -44,15 +44,12 @@
     "@sentry/react": "^7.11.1",
     "brainly-style-guide": "^219.0.0",
     "browser-polyfill": "^3.20.2",
-    "chart.js": "^3.9.1",
     "clsx": "^1.2.1",
-    "md5": "^2.3.0",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.35",
     "react": "^18.2.0",
-    "react-chartjs-2": "^4.3.1",
-    "react-content-loader": "^6.2.0",
     "react-dom": "^18.2.0",
-    "react-moment": "^1.1.2"
+    "react-moment": "^1.1.2",
+    "zustand": "^4.1.1"
   }
 }

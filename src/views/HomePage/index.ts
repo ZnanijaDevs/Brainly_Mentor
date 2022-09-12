@@ -32,9 +32,11 @@ class Homepage {
     const items = [...this.#box.querySelectorAll(`[data-testid=ranking-item]:not(.candidate)`)];
     if (!items.length) return;
 
-    const candidates = await _API.GetCandidates(
-      items.map(item => findUserId(item.querySelector("a[href*=profil]")))
+    const candidatesIdsToFetch = items.map(item => 
+      findUserId(item.querySelector("a[href*=profil]"))
     );
+  
+    const candidates = await _API.GetCandidates(candidatesIdsToFetch, 50);
 
     for (let item of items) {
       const candidate = candidates.candidates.find(candidate =>
@@ -42,7 +44,7 @@ class Homepage {
       );
       
       const candidateColor = /отказ/i.test(candidate?.status) ? "red" :
-        /актив/i.test(candidate?.status) ? "#6322ff" : "#55ab80";
+        candidate?.isInactive ? "#55ab80" : "#6322ff";
 
       item.classList.add("candidate");
       if (candidate) {

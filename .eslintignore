@@ -1,4 +1,3 @@
-src/_locales/*
 src/locales/*
 src/assets/*
 src/typings/*.d.ts

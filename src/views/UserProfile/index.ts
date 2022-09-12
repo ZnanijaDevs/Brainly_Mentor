@@ -14,7 +14,7 @@ const userNick = nickSelector.textContent.trim();
     !helpedInfoSelector
   ) return;
 
-  const data = await _API.GetCandidates([userId]);
+  const data = await _API.GetCandidates([userId], 1);
   const candidateIsFound = data.count > 0;
 
   helpedInfoSelector.insertAdjacentHTML("beforebegin", `

@@ -1,13 +1,5 @@
 import type { IconPropsType, IconType } from "brainly-style-guide";
 
-export type BasicSuccessResponse = {
-  success: true;
-}
-
-export type DashboardScreens = "MyMentees" | "Mentors" | "Mentees";
-
-export type Market = "us";
-
 export type GetActionsDataType = {
   actions: Action[];
   hasMore: boolean;
@@ -41,11 +33,6 @@ export interface Action {
   localizedType: string;
 }
 
-type MenteeCharts = {
-  count: number;
-  dataset: number[];
-}
-
 export type Warn = {
   time: string;
   reason: string;
@@ -55,35 +42,19 @@ export type Warn = {
   active: boolean;
 }
 
-export interface MenteeCommonData {
-  id: number;
-  nick: string;
-  avatar: string;
-}
-
-export interface Mentee extends MenteeCommonData {
-  market: Market;
-  mentorId: number;
-  note: string;
-  rank: string;
-  charts: {
-    [T in keyof {"daily", "weekly", "monthly"}]: MenteeCharts;
-  };
-}
-
 export interface Mentor {
+  _id: string;
+  isAdmin: boolean;
   id: number;
   nick: string;
   avatar: string;
   senior: boolean;
-  market: Market;
-  mentees: Mentee[];
 }
 
 export interface Candidate {
   id: number;
   nick: string;
   status: string;
-  is_inactive: boolean;
-  updated_at: string;
+  isInactive: boolean;
+  link: string;
 }

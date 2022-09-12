@@ -3,7 +3,7 @@
     "jsx": "react-jsx",
     "allowJs": true,
     "baseUrl": "./src",
-    "target": "es6",
+    "target": "ESNext",
     "module": "commonjs",
     "outDir": "./build",
     "esModuleInterop": true,
@@ -16,7 +16,7 @@
       "@assets/*": ["./assets/*"],
       "@brainly/*": ["./lib/api/brainly/*"]
     },
-    "lib": ["ES5", "ES6", "DOM", "DOM.Iterable"]
+    "lib": ["ES5", "ES6", "DOM", "DOM.Iterable", "ES2021", "ESNext"]
   },
   "exclude": ["node_modules", "build", ".vscode"],
   "include": ["src"]

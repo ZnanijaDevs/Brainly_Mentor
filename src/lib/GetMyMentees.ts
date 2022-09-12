@@ -4,14 +4,15 @@ export type MyMenteeDataType = {
   nick: string;
   id: number;
   dailyActionsCount: number;
+  avatar?: string;
+  ranks: string[];
+  link: string;
 };
 
 type UserRankingPlace = {
   place: number;
   points: number;
-  user: {
-    id: string;
-  };
+  user: { id: string; };
 }
 
 const toUserId = (encodedId: string) => +atob(encodedId).split(":").pop();
@@ -48,9 +49,12 @@ export default async (): Promise<MyMenteeDataType[]> => {
     mentees.push({
       nick: user.nick,
       id: user.id,
-      dailyActionsCount: graphqlUserPlaceData?.points ?? 0
+      dailyActionsCount: graphqlUserPlaceData?.points ?? 0,
+      avatar: user.avatars?.[64],
+      ranks: user.ranks.names,
+      link: `/profil/${encodeURIComponent(user.nick)}-${user.id}`
     });
   }
 
-  return mentees;
+  return mentees.sort((a, b) => b.dailyActionsCount - a.dailyActionsCount);
 };

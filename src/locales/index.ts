@@ -62,7 +62,7 @@ export default {
     "toMentors": "К наставникам",
     "toUMentees": "К своим ученикам",
     "note": "Заметка",
-    "senior": "Старший наставник",
+    "senior": "Старший",
     "contentType": "Тип контента",
     "actionType": "Тип акции",
     "noActionsMatchingFilters": "Нет акций, удовлетворяющие фильтрам",

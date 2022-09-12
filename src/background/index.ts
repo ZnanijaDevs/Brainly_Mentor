@@ -1,9 +1,9 @@
-import type { 
-  BackgroundMessage
-} from "@typings/extension";
 import ext from "webextension-polyfill";
 
-import "./updateExtensionConfigs";
+interface BackgroundMessage {
+  type: string;
+  data?: unknown;
+}
 
 class BackgroundListener {
   private tabId: number;

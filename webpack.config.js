@@ -49,7 +49,6 @@ const config = {
     new CopyPlugin({
       patterns: [
         { from: `${SRC_DIR}/assets/`, to: "assets/" },
-        { from: `${SRC_DIR}/_locales/`, to: "_locales/" },
         { from: `${SRC_DIR}/icons/`, to: "icons/" },
         {
           from: "manifest.json",

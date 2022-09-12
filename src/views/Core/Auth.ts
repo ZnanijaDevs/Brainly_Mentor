@@ -3,13 +3,16 @@ import storage from "@lib/storage";
 import locales from "@locales";
 import flash from "@utils/flashes";
 
-storage.get(`authToken_${locales.market}`).then(async function(token) {
-  if (token) return;
+storage.get("token").then(async token => {
+  if (token) {
+    console.debug(`Mentor authed. Token: ${token}`);
+    return;
+  }
 
   try {
     const userConversation = await BrainlyApi.GetDM(locales.botUserId);
 
-    const mentorTokenRegex = /(?<=\[).+(?=__brainly-mentor]$)/;
+    const mentorTokenRegex = /(?<=\[mentor-ext-).+(?=\])/;
 
     const lastMessage = userConversation.data.messages
       .reverse()
@@ -25,7 +28,7 @@ storage.get(`authToken_${locales.market}`).then(async function(token) {
     
     if (!mentorToken) throw Error(locales.errors.couldNotFindAuthTokenInDM);
 
-    await storage.set({ [`authToken_${locales.market}`]: mentorToken });
+    await storage.set({ token: mentorToken });
 
     flash("success", locales.common.youHaveBeenAuthorized);
 

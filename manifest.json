@@ -1,8 +1,7 @@
 {
-  "name": "__MSG_name__",
-  "description": "__MSG_description__",
+  "name": "Znanija Наставник",
+  "description": "Расширение для наставников Znanija.com с полезными функциями и возможностями",
   "manifest_version": 3,
-  "default_locale": "ru",
   "icons": {
     "128": "icons/icon.png"
   },
