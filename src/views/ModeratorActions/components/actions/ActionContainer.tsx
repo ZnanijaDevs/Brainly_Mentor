@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { Flex, Link, Icon, Text, Avatar, Button } from "brainly-style-guide";
 
 import type { Action } from "@typings";
-import replaceTextWithLinks from "@utils/ReplaceTextWithLinks";
+import replaceTextWithLinks from "@utils/replaceTextWithLinks";
 import locales from "@locales";
 
 import Tooltip from "../common/Tooltip";

@@ -1,4 +1,8 @@
 import type { Mentor, Candidate } from "@typings";
+import type { 
+  GetQuestionResponseDataType, 
+  QuestionLogEntriesByDateDataType 
+} from "@typings/responses";
 import locales from "@locales";
 import storage from "@lib/storage";
 
@@ -79,6 +83,14 @@ class Api {
     candidates: Candidate[];
   }> {
     return await this.Req("GET", `candidates?limit=${limit}&ids=${ids.join(",")}`);
+  }
+
+  async GetQuestion(id: number): Promise<GetQuestionResponseDataType> {
+    return await this.Req("GET", `questions/${id}`);
+  }
+
+  async GetQuestionLog(questionId: number): Promise<QuestionLogEntriesByDateDataType> {
+    return await this.Req("GET", `questions/log/${questionId}`);
   }
 }
 

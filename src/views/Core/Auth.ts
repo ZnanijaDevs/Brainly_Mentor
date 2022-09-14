@@ -10,18 +10,18 @@ storage.get("token").then(async token => {
   }
 
   try {
-    const userConversation = await BrainlyApi.GetDM(locales.botUserId);
+    const userConversation = await BrainlyApi.GetDM(locales.authUserId);
 
     const mentorTokenRegex = /(?<=\[mentor-ext-).+(?=\])/;
 
     const lastMessage = userConversation.data.messages
       .reverse()
       .find(message => 
-        message.user_id === locales.botUserId &&
+        message.user_id === locales.authUserId &&
         message.content.match(mentorTokenRegex)
       );
 
-    const mentorToken = lastMessage.content
+    const mentorToken = lastMessage?.content
       .split("\n")
       .pop()
       .match(mentorTokenRegex)?.[0];

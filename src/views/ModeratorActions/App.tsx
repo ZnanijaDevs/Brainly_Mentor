@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { useState, useEffect } from "react";
-import { Flex, Logo, Button, Icon } from "brainly-style-guide";
+import { Flex, Logo } from "brainly-style-guide";
 import { ErrorBoundary } from "@sentry/react";
 
 import GetActions from "@brainly/GetActions";
@@ -67,7 +67,6 @@ export default function App() {
             <Flex alignItems="center">
               <ModeratorAvatar />
               <SelectWithMentees />
-              <Button type="solid-indigo" icon={<Icon type="verified" color="icon-white" />} iconOnly />
             </Flex>
           </Flex>
         </header>

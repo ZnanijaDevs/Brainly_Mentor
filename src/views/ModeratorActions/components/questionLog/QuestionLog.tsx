@@ -1,52 +1,48 @@
-import { useState, useReducer } from "react";
+import { useState, useEffect } from "react";
 import { Flex, Headline, Spinner, Button, Icon } from "brainly-style-guide";
 
 import locales from "@locales";
-import BrainlyApi from "@brainly/index";
-import type { GetQuestionLogResponse, QuestionLogEntry } from "@typings/brainly";
-
-type QuestionLogState = {
-  loading: boolean;
-  error: Error;
-  hidden: boolean;
-  logEntries: {
-    [x: string]: QuestionLogEntry[];
-  };
-  users: GetQuestionLogResponse["users_data"];
-}
-
+import type { QuestionLogEntriesByDateDataType } from "@typings/responses";
+import _API from "@lib/api/extension";
+import EntriesSection from "./EntriesSection";
 
 export default function QuestionLog(props: {
   taskId: number;
 }) {
-  /*const [state, setState] = useReducer(
-    (state, newState) => ({ ...state, ...newState }),
-    {loading: true, data: null, something: ''}
-  )
+  const [logEntries, setLogEntries] = useState<QuestionLogEntriesByDateDataType>(null);
+  const [hidden, setHidden] = useState(
+    !!JSON.parse(localStorage.getItem("questionLogHidden"))
+  );
 
-  const [logRequest, setLogRequest] = useState<QuestionLogState>({
-    loading: true,
-    error: null,
-    hidden: !!JSON.parse(localStorage.getItem("questionLogHidden")),
-    logEntries: {},
-    users: []
-  });
-
-  const updateState = (_state: Partial<QuestionLogState>) =>
-    setLogRequest(prevState => 
-      ({ ..._state, ...prevState })
-    );
-
-
+  useEffect(() => {
+    _API.GetQuestionLog(props.taskId)
+      .then(data => setLogEntries(data));
+  }, []);
 
   const toggleVisibility = () => {
-    const hidden = !logRequest.hidden;
+    setHidden(prevState => !prevState);
+    localStorage.setItem("questionLogHidden", JSON.stringify(!hidden));
+  };
 
-    this.setState({ hidden });
-    localStorage.setItem("questionLogHidden", JSON.stringify(hidden));
-  }
-*/
-  return (
-    <div></div>
-  );
+  return (<>
+    <Flex className="question-log" fullHeight data-log-hidden={hidden}>
+      {logEntries === null ? <Spinner size="xsmall" /> : <>
+        <Flex alignItems="center" className="question-log-header">
+          <Button onClick={toggleVisibility} type="outline" iconOnly icon={<Icon type="arrow_left" color="adaptive" size={24} />} />
+          <Headline type="h2" size="medium" extraBold color="text-gray-70">
+            {locales.common.questionLog}
+          </Headline>
+        </Flex>
+        <Flex direction="column" className="question-log-list" fullHeight>
+          {Object.keys(logEntries).map((entryDate, i) =>
+            <EntriesSection key={i} date={entryDate} entries={logEntries[entryDate]} />
+          )}
+        </Flex>
+      </>}
+    </Flex>
+    <Flex onClick={toggleVisibility} alignItems="center" direction="column" className="open-question-log" hidden={!hidden}>
+      <Headline transform="uppercase">{locales.common.questionLog}</Headline>
+      <Icon type="arrow_right" color="adaptive" size={24} />
+    </Flex>
+  </>);
 }

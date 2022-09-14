@@ -10,7 +10,7 @@ import TabLink from "./components/common/TabLink";
 import MenteesList from "./components/mentees/MenteesList";
 import MentorsList from "./components/mentors/MentorsList";
 import ErrorFallback from "./ErrorFallback";
-import AddMenteeBox from "./components/mentors/AddMentorBox";
+import AddMentorBox from "./components/mentors/AddMentorBox";
 
 export default function Modal() {
   const { isSeniorMentor, mentor, setMentor } = useStore();
@@ -59,7 +59,7 @@ export default function Modal() {
       {currentTab === "mentees" ? 
         <MenteesList /> : 
         <>
-          <AddMenteeBox />
+          <AddMentorBox />
           <MentorsList />
         </>
       }

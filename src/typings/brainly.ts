@@ -190,7 +190,3 @@ export type GetMessagesResponse = CommonResponse<{
     new: boolean;
   }[];
 }>;
-
-export type GetQuestionResponse = CommonResponse<QuestionData>;
-
-export type GetQuestionLogResponse = CommonResponse<QuestionLogEntry[]>;

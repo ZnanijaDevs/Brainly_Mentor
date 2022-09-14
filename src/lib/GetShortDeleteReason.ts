@@ -1,5 +1,9 @@
-import _API from "./api/extension";
+import locales from "@locales";
 
-export function GetShortDeleteReason(fullReason: string) {
-  return { id: 0, name: "", regex: "" };
-}
+export default (fullReason: string) => {
+  let match = locales.deletionReasons.find(
+    reason => fullReason.includes(reason.text)
+  );
+  
+  return match || { id: 0, name: "" };
+};

@@ -7,15 +7,16 @@ import {
   Link
 } from "brainly-style-guide";
 
+import replaceTextWithLinks from "@utils/replaceTextWithLinks";
+import getShortDeleteReason from "@lib/getShortDeleteReason";
 import type { Warn } from "@typings";
-import ReplaceTextWithLinks from "@utils/ReplaceTextWithLinks";
 
 export default function WarnEntry(props: {
   warn: Warn;
 }) {
   const warn = props.warn;
 
-  const beautifiedReason = ""; // TODO: add beautified reason
+  const beautifiedReason = getShortDeleteReason(warn.reason)?.name;
 
   return (
     <AccordionItem
@@ -34,13 +35,13 @@ export default function WarnEntry(props: {
     >
       <Box padding="xs">
         <div className="warn-reason" dangerouslySetInnerHTML={{ 
-          __html: ReplaceTextWithLinks(warn.reason)
+          __html: replaceTextWithLinks(warn.reason)
         }} />
       </Box>
       <SeparatorHorizontal />
       <Box padding="xs">
         <div className="warn-content" dangerouslySetInnerHTML={{ 
-          __html: ReplaceTextWithLinks(warn.content)
+          __html: replaceTextWithLinks(warn.content)
         }} />
       </Box>
     </AccordionItem>

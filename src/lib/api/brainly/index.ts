@@ -2,9 +2,7 @@ import locales from "@locales";
 import type { 
   CommonResponse,
   GetConversationResponse,
-  GetMessagesResponse,
-  GetQuestionLogResponse,
-  GetQuestionResponse
+  GetMessagesResponse
 } from "@typings/brainly";
 
 class BrainlyApi {
@@ -69,14 +67,6 @@ class BrainlyApi {
       "GET", 
       `api_messages/get_messages/${conversation.data.conversation_id}`
     );
-  }
-
-  async GetQuestion(id: number): Promise<GetQuestionResponse> {
-    return await this.Legacy("GET", `api_tasks/main_view/${id}`);
-  }
-
-  async GetQuestionLog(id: number): Promise<GetQuestionLogResponse> {
-    return await this.Legacy("GET", `api_task_lines/big/${id}`);
   }
 
   async GetModerationItems(): Promise<CommonResponse> {

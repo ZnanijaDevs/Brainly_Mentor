@@ -2,7 +2,7 @@ import type {
   Action,
   GetActionsDataType 
 } from "@typings";
-import { GetShortDeleteReason } from "@lib/GetShortDeleteReason";
+import getShortDeleteReason from "@lib/getShortDeleteReason";
 import locales from "@locales";
 import GetPage from "./GetPage";
 
@@ -25,7 +25,7 @@ export default async function GetBrainlyActions(
     let taskId = +row.querySelector(".dataTime > a").textContent;
     action.task = {
       id: taskId,
-      link: `${locales.taskPath}/${taskId}`
+      link: `/task/${taskId}`
     };
 
     let content = row.querySelector("td:nth-child(2)").childNodes?.[6]?.textContent;
@@ -48,7 +48,7 @@ export default async function GetBrainlyActions(
       ?.textContent
       ?.replace(/^:\s?/, "");
     
-    let beautifiedReason = GetShortDeleteReason(reason);
+    let beautifiedReason = getShortDeleteReason(reason);
     action.reason = {
       id: beautifiedReason?.id,
       shortReason: beautifiedReason?.name,
