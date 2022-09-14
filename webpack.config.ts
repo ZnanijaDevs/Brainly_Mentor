@@ -1,23 +1,22 @@
-/* eslint-disable @typescript-eslint/no-var-requires, @typescript-eslint/no-unused-vars */
-const path = require("path");
-const webpack = require("webpack");
-const TerserPlugin = require("terser-webpack-plugin");
-const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const RemoveEmptyScriptsPlugin = require("webpack-remove-empty-scripts");
-const ZipPlugin = require("zip-webpack-plugin");
+import webpack from "webpack";
+import path from "path";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import CopyPlugin from "copy-webpack-plugin";
+import TerserPlugin from "terser-webpack-plugin";
+import TsconfigPathsPlugin from "tsconfig-paths-webpack-plugin";
+import RemoveEmptyScriptsPlugin from "webpack-remove-empty-scripts";
+import ZipPlugin from "zip-webpack-plugin";
 
-const makeEntries = require("./build-scripts/makeEntries");
-const transformManifest = require("./build-scripts/transformManifest");
+import makeEntries from "./build-scripts/makeEntries";
+import transformManifest from "./build-scripts/transformManifest";
 
-const isProd = process.env.NODE_ENV === "production";
+const NODE_ENV = process.env.NODE_ENV.trim() as "development" | "production";
+const isProd = NODE_ENV === "production";
 
 const SRC_DIR = "./src";
-const BUILD_DIR = `build-${isProd ? "production" : "dev"}`;
+const OUT_DIR = `./build-${isProd ? "production" : "dev"}`;
 
-/** @type {webpack.Configuration} */
-const config = {
+const config: webpack.Configuration = {
   entry: {
     ...makeEntries(`${SRC_DIR}/views/*/*(*.ts|*.tsx|*.js|*.jsx)`, "content-scripts", "index", true),
     ...makeEntries(`${SRC_DIR}/styles/*/styles.scss`, "content-scripts", "style", true),
@@ -26,7 +25,7 @@ const config = {
     ...makeEntries(`${SRC_DIR}/sentry.ts`, "content-scripts", "sentry"),
   },
   output: {
-    path: path.resolve(__dirname, BUILD_DIR),
+    path: path.resolve(__dirname, OUT_DIR),
   },
   module: {
     rules: [{
@@ -44,21 +43,21 @@ const config = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      "process.env.NODE_ENV": JSON.stringify(isProd ? "production" : "development")
+      "process.env.NODE_ENV": JSON.stringify(NODE_ENV)
     }),
     new CopyPlugin({
       patterns: [
         { from: `${SRC_DIR}/assets/`, to: "assets/" },
         { from: `${SRC_DIR}/icons/`, to: "icons/" },
         {
-          from: "manifest.json",
+          from: "./manifest.json",
           transform: (content) => transformManifest(content)
         },
         "LICENSE"
       ]
     }),
     new MiniCssExtractPlugin(),
-    new RemoveEmptyScriptsPlugin()
+    new RemoveEmptyScriptsPlugin({ enabled: true })
   ],
   resolve: {
     extensions: [".ts", ".js", ".tsx"],
@@ -70,7 +69,7 @@ const config = {
 
 if (isProd) {
   config.plugins.push(
-    new ZipPlugin({ filename: `build-${require("./package.json").version}.zip` })
+    new ZipPlugin({ filename: "build.zip" })
   );
 
   config.optimization = {
@@ -86,4 +85,4 @@ if (isProd) {
   };
 }
 
-module.exports = config;
+export default config;

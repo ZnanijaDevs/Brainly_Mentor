@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./",
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "removeComments": true
+  },
+  "include": ["webpack.config.ts"],
+  "exclude": ["node_modules/", "./src"]
+}

@@ -3,8 +3,9 @@
   "version": "3.0.3",
   "description": "A toolbox for Brainly mentors to make their life and work easier",
   "scripts": {
-    "production": "webpack build --mode=production",
-    "dev": "webpack -w --mode=development",
+    "build:dev": "npm run webpack:compile && set NODE_ENV=development && webpack -w --mode=development",
+    "build:prod": "npm run webpack:compile && set NODE_ENV=production && webpack build --mode=production",
+    "webpack:compile": "tsc --project tsconfig.webpack-config.json",
     "lint:ts": "eslint ./src --ext .ts,.tsx",
     "lint:scss": "stylelint ./src/**/*.scss",
     "pkg:depcheck": "depcheck",

@@ -7,3 +7,4 @@ build-*
 dist/
 debug.log
 sentry-dsn.*
+webpack.config.js
