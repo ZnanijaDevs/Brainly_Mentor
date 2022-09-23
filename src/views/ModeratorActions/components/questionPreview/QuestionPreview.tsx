@@ -31,7 +31,7 @@ export default function QuestionPreview(props: {
     return;
   }
 
-  let question = questionData?.question;
+  let question = questionData?.task;
 
   return createPortal(
     <div className="overlay">
@@ -43,7 +43,7 @@ export default function QuestionPreview(props: {
                 {locales.common.question}
               </Link>
               <Text color="text-gray-70" size="small">
-                <b>{locales.subjects.find(subject => +subject.id === question.subjectId)?.name} </b> 
+                <b>{question.subject} </b> 
                 • {question.points} {locales.common.pts}
               </Text>
             </Flex>

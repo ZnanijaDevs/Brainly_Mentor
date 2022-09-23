@@ -3,8 +3,8 @@ import _API from "@lib/api/extension";
 const helpedInfoSelector = document.querySelector(".helped_info");
 const nickSelector: HTMLLinkElement = document.querySelector(".info .info_top > .ranking > h2 > a");
 
-const userId = +nickSelector.href.match(/\d+$/);
-const userNick = nickSelector.textContent.trim();
+const userId = +nickSelector?.href.match(/\d+$/);
+const userNick = nickSelector?.textContent.trim();
 
 (async function() {
   if (

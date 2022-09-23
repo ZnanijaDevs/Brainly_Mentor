@@ -44,7 +44,7 @@ export default function LogEntry(props: {
       });
   
     if (entry.type === "deleted") {
-      let deleteReason = getShortDeleteReason(entry.extraData?.[0]?.text)?.name;
+      let deleteReason = getShortDeleteReason(entry.descriptions[0]?.text)?.name;
     
       if (deleteReason) 
         pieces.push(` ${locales.common.as} `, 
@@ -74,11 +74,11 @@ export default function LogEntry(props: {
           icon={<Icon type={detailsVisible ? "arrow_up" : "more"} color="icon-black" size={16} />} 
           iconOnly
           onClick={() => setDetailsVisible(prevState => !prevState)}
-          className={entry.extraData === undefined ? "opacity-0" : ""}
+          className={entry.descriptions.length === 0 ? "opacity-0" : ""}
         />
       </div>
       <Flex hidden={!detailsVisible} direction="column" marginTop="xs" marginBottom="s">
-        {entry.extraData?.map((description, i) =>
+        {entry.descriptions.map((description, i) =>
           <Flex direction="column" key={i}>
             <Text size="small" weight="bold">{description.title}</Text>
             <Text breakWords size="small" dangerouslySetInnerHTML={{

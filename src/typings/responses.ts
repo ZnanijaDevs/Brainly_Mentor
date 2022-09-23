@@ -1,46 +1,45 @@
-type AuthorDataInGetQuestionResponse = {
-  avatar?: string;
+export interface UserBasicData {
   nick: string;
   id: number;
+  avatar?: string;
   ranks: string[];
+  is_deleted?: boolean;
+}
+
+export type GeneralNodeInGetQuestionResponse = {
+  attachments: string[];
+  created: string;
+  content: {
+    filtered: string;
+    full: string;
+    short: string;
+  };
+  author: UserBasicData;
+  has_attachments: boolean;
+  id: number;
+  is_reported: boolean;
+  is_deleted: boolean;
 };
 
-export type QuestionDataInGetQuestionResponse = {
-  attachments: string[];
-  author: AuthorDataInGetQuestionResponse;
-  content: string;
-  created: string;
-  hasAttachments: boolean;
-  id: number;
-  isDeleted: boolean;
-  isReported: boolean;
+export type AnswerInGetQuestionResponse = GeneralNodeInGetQuestionResponse & {
+  is_approved: boolean;
+  is_best: boolean;
+};
+
+export type QuestionInGetQuestionResponse = GeneralNodeInGetQuestionResponse & {
   link: string;
   points: number;
-  subjectId: number;
-};
-
-export type ResponseDataInGetQuestionResponse = {
-  attachments: string[];
-  author: AuthorDataInGetQuestionResponse;
-  content: string;
-  created: string;
-  hasAttachments: boolean;
-  id: number;
-  isReported: boolean;
-  isDeleted: boolean;
-  isBest: boolean;
-  isApproved: boolean;
-};
+  subject: string;
+}
 
 export type GetQuestionResponseDataType = {
-  isLegacy: boolean;
-  responsesCount: number;
-  responses: ResponseDataInGetQuestionResponse[];
-  question: QuestionDataInGetQuestionResponse;
+  responses: AnswerInGetQuestionResponse[];
+  responses_count: number;
+  task: QuestionInGetQuestionResponse;
 };
 
 export interface QuestionLogEntryDataType {
-  extraData?: {
+  descriptions: {
     text: string;
     title: string;
   }[];
@@ -55,6 +54,8 @@ export interface QuestionLogEntryDataType {
   time: string;
   text: string;
   warn?: boolean;
+  owner?: UserBasicData;
+  user?: UserBasicData;
 }
 
 export type QuestionLogEntriesByDateDataType = Record<string, QuestionLogEntryDataType[]>;

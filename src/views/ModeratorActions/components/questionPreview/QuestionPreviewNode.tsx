@@ -2,17 +2,17 @@ import { Box, Flex, Text, Icon, Avatar, Link } from "brainly-style-guide";
 import replaceTextWithLinks from "@utils/replaceTextWithLinks";
 import locales from "@locales";
 import type { 
-  QuestionDataInGetQuestionResponse, 
-  ResponseDataInGetQuestionResponse 
+  QuestionInGetQuestionResponse, 
+  AnswerInGetQuestionResponse  
 } from "@typings/responses";
 
 export default function QuestionPreviewNode(props: {
-  node: QuestionDataInGetQuestionResponse | ResponseDataInGetQuestionResponse
+  node: QuestionInGetQuestionResponse | AnswerInGetQuestionResponse
 }) {
   let node = props.node;
 
   let isAnswer = !("link" in node);
-  let answer = node as ResponseDataInGetQuestionResponse;
+  let answer = node as AnswerInGetQuestionResponse;
   let author = node.author;
 
   return (
@@ -24,9 +24,9 @@ export default function QuestionPreviewNode(props: {
         <Text color="text-gray-70" size="small">
           {new Date(node.created).toLocaleString("ru-RU")}
         </Text>
-        {(isAnswer && answer.isBest) && <Icon type="crown" color="icon-yellow-50" size={16} />}
+        {(isAnswer && answer.is_best) && <Icon type="crown" color="icon-yellow-50" size={16} />}
       </Flex>
-      <Flex direction="column" className="question-preview-content-box-content" data-is-deleted={!isAnswer && node.isDeleted}>
+      <Flex direction="column" className="question-preview-content-box-content" data-is-deleted={!isAnswer && node.is_deleted}>
         <Flex alignItems="center" className="sg-flex--gap-s">
           <Avatar size="s" imgSrc={author.avatar} />
           <Flex direction="column">
@@ -39,9 +39,9 @@ export default function QuestionPreviewNode(props: {
           </Flex>
         </Flex>
         <Text className="sg-flex--margin-top-s" size="small" dangerouslySetInnerHTML={{
-          __html: replaceTextWithLinks(node.content)
+          __html: replaceTextWithLinks(node.content.full)
         }} />
-        {node.hasAttachments &&
+        {node &&
           <Flex marginTop="s" alignItems="center" className="question-preview-content-box-attachments">
             <a target="_blank" href={node.attachments[0]} rel="noreferrer" style={{ margin: "auto" }}>
               <img src={node.attachments[0]} style={{ width: "200px", height: "auto" }} />
@@ -49,7 +49,7 @@ export default function QuestionPreviewNode(props: {
           </Flex>
         }
       </Flex>
-      {node.isReported && 
+      {node.is_reported && 
         <Icon className="question-preview-report-flag" type="report_flag" color="icon-red-50" size={32} />
       }
     </Box>

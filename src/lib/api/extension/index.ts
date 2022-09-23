@@ -9,7 +9,7 @@ import storage from "@lib/storage";
 const ERRORS = locales.errors;
 
 class Api {
-  private serverUrl = "https://mentors-v2.br-helper.com";
+  private serverUrl = "http://localhost:3000";//"https://mentors-v2.br-helper.com";
   private authToken: string;
 
   get serverURL() {
