@@ -15,7 +15,7 @@ export default function EntriesSection(props: {
       <Flex alignItems="center">
         <Text weight="bold" size="small">{props.date}</Text>
         <Button 
-          type="solid-light" 
+          variant="solid-light" 
           iconOnly 
           size="s" 
           icon={<Icon type={visible ? "arrow_up" : "arrow_down"} size={16} />}

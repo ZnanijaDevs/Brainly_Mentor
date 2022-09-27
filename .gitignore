@@ -6,5 +6,4 @@ build-*
 !build-scripts
 dist/
 debug.log
-sentry-dsn.*
 webpack.config.js

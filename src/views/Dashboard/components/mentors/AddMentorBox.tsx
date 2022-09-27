@@ -54,13 +54,9 @@ export default function AddMentorBox() {
         disabled={loading}
         errorMessage={error?.message}
       />
-      <Button 
-        type="solid-inverted" 
-        size="s" 
-        disabled={!linkIsValid}
-        onClick={addMentor}
-        loading={loading}
-      >OK</Button>
+      <Button variant="solid-inverted" size="s" disabled={!linkIsValid} onClick={addMentor} loading={loading}>
+        OK
+      </Button>
     </Flex>
   );
 }

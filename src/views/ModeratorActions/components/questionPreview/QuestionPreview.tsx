@@ -47,7 +47,7 @@ export default function QuestionPreview(props: {
                 • {question.points} {locales.common.pts}
               </Text>
             </Flex>
-            <Button className="close-modal-button" onClick={props.onClose} type="transparent" iconOnly icon={<Icon color="icon-black" type="close" />} />
+            <Button className="close-modal-button" onClick={props.onClose} variant="transparent" iconOnly icon={<Icon color="icon-black" type="close" />} />
           </Flex>
           <Flex direction="column">
             {[

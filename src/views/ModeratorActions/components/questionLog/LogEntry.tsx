@@ -70,7 +70,7 @@ export default function LogEntry(props: {
         <Text className="question-log-entry-time" weight="bold" color="text-gray-50">{entry.time}</Text>
         <Button
           size="s"
-          type="transparent" 
+          variant="transparent" 
           icon={<Icon type={detailsVisible ? "arrow_up" : "more"} color="icon-black" size={16} />} 
           iconOnly
           onClick={() => setDetailsVisible(prevState => !prevState)}

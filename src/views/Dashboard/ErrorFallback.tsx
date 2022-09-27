@@ -12,7 +12,7 @@ export default function ErrorFallback(props: {
       <Headline extraBold color="text-red-60">{locales.errors.internalError}</Headline>
       <Text size="small">{error.message}</Text>
       <Flex marginTop="xs">
-        <Button type="outline" onClick={() => props.onTryAgain?.()}>{locales.common.tryAgain}</Button>
+        <Button variant="outline" onClick={() => props.onTryAgain?.()}>{locales.common.tryAgain}</Button>
       </Flex>
     </div>
   );

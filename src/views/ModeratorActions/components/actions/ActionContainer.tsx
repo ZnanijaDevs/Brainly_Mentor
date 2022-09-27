@@ -43,7 +43,7 @@ export default function ActionContainer(props: {
           icon={<Icon color="icon-gray-70" size={24} type="seen" />}
           iconOnly
           size="s"
-          type="transparent"
+          variant="transparent"
           onClick={() => setVisibleTooltip("question")}
         />
         {action.reason.fullText &&

@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { useState, useEffect } from "react";
 import { Flex, Logo } from "brainly-style-guide";
-import { ErrorBoundary } from "@sentry/react";
+import { ErrorBoundary } from "react-error-boundary";
 
 import GetActions from "@brainly/GetActions";
 import type { GetActionsDataType } from "@typings";
@@ -52,8 +52,8 @@ export default function App() {
 
   return (
     <div id="layout">
-      <ErrorBoundary fallback={({ error, resetError }) => (
-        <ErrorContainer error={error} onTryAgain={resetError} />
+      <ErrorBoundary FallbackComponent={({ error, resetErrorBoundary }) => (
+        <ErrorContainer error={error} onTryAgain={resetErrorBoundary} />
       )}>
         <header>
           <Flex justifyContent="space-between" alignItems="center">

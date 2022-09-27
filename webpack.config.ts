@@ -10,8 +10,7 @@ import ZipPlugin from "zip-webpack-plugin";
 import makeEntries from "./build-scripts/makeEntries";
 import transformManifest from "./build-scripts/transformManifest";
 
-const NODE_ENV = process.env.NODE_ENV.trim() as "development" | "production";
-const isProd = NODE_ENV === "production";
+const isProd = process.env.NODE_ENV.trim() === "production";
 
 const SRC_DIR = "./src";
 const OUT_DIR = `./build-${isProd ? "production" : "dev"}`;
@@ -22,7 +21,6 @@ const config: webpack.Configuration = {
     ...makeEntries(`${SRC_DIR}/styles/*/styles.scss`, "content-scripts", "style", true),
     ...makeEntries(`${SRC_DIR}/views/Inject.ts`, "content-scripts", "contentScript"),
     ...makeEntries(`${SRC_DIR}/background/*.ts`, "background", "serviceWorker"),
-    ...makeEntries(`${SRC_DIR}/sentry.ts`, "content-scripts", "sentry"),
   },
   output: {
     path: path.resolve(__dirname, OUT_DIR),
@@ -42,17 +40,11 @@ const config: webpack.Configuration = {
     }],
   },
   plugins: [
-    new webpack.DefinePlugin({
-      "process.env.NODE_ENV": JSON.stringify(NODE_ENV)
-    }),
     new CopyPlugin({
       patterns: [
-        { from: `${SRC_DIR}/assets/`, to: "assets/" },
-        { from: `${SRC_DIR}/icons/`, to: "icons/" },
-        {
-          from: "./manifest.json",
-          transform: (content) => transformManifest(content)
-        },
+        { from: `${SRC_DIR}/icons/`, to: "icons/" }, 
+        { from: "./manifest.json", transform: (content) => transformManifest(content) }, 
+        { from: `${SRC_DIR}/assets/styleguide-icons.js`, to: "assets/" }, 
         "LICENSE"
       ]
     }),

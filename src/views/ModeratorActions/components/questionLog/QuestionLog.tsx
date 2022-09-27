@@ -28,7 +28,7 @@ export default function QuestionLog(props: {
     <Flex className="question-log" fullHeight data-log-hidden={hidden}>
       {logEntries === null ? <Spinner size="xsmall" /> : <>
         <Flex alignItems="center" className="question-log-header">
-          <Button onClick={toggleVisibility} type="outline" iconOnly icon={<Icon type="arrow_left" color="adaptive" size={24} />} />
+          <Button onClick={toggleVisibility} variant="outline" iconOnly icon={<Icon type="arrow_left" color="adaptive" size={24} />} />
           <Headline type="h2" size="medium" extraBold color="text-gray-70">
             {locales.common.questionLog}
           </Headline>

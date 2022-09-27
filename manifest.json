@@ -16,7 +16,7 @@
   }],
   "content_scripts": [{
     "matches": ["*://znanija.com/*"],
-    "js": ["content-scripts/sentry.js", "content-scripts/contentScript.js"],
+    "js": ["content-scripts/contentScript.js"],
     "run_at": "document_start"
   }],
   "background": {

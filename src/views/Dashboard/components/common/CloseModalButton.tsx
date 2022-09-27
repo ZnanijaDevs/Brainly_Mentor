@@ -8,7 +8,7 @@ export default function CloseModalButton(props: {
       onClick={() => props.onClick()} 
       icon={<Icon color="adaptive" type="close" />} 
       iconOnly 
-      type="transparent"
+      variant="transparent"
     />
   );
 }

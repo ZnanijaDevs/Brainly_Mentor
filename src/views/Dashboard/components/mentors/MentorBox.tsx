@@ -65,7 +65,7 @@ export default function MentorBox(props: {
           iconOnly
           size="s"
           toggle="red"
-          type="outline"
+          variant="outline"
           onClick={deleteMentor}
           disabled={isDisabled}
         />
