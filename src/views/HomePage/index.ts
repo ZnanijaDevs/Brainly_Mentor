@@ -1,4 +1,5 @@
 import _API from "@lib/api/extension";
+import renderRecommendedCandidates from "./renderRecommendedCandidates";
 
 const findUserId = (link: HTMLLinkElement) => +/\d+$/.exec(link.href);
 
@@ -18,6 +19,7 @@ class Homepage {
 
     this.BindMutationObserver();
     this.RenderLabels();
+    renderRecommendedCandidates();
   }
 
   BindMutationObserver() {

@@ -1,3 +1,50 @@
+.candidates-section {
+  border: 2px solid #ebf2f7;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: -10px;
+  margin-bottom: 15px;
+
+  &__entry {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+
+    img {
+      border-radius: 50%;
+      height: 30px;
+      width: 30px;
+      flex-shrink: 0;
+    }
+
+    .candidate-info {
+      line-height: 1;
+
+      > a {
+        font-size: 17px;
+      }
+
+      > span {
+        font-size: 14.5px;
+      }
+    }
+
+    > div > span:last-child {
+      font-size: 14.5px;
+      color: #0e0e0e;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 240px;
+    }
+  }
+}
+
+.reload-candidates-section {
+  cursor: pointer;
+}
+
 .candidate-label {
   border: 2px solid #55ab80;
   background: white;

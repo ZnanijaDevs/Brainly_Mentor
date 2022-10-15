@@ -58,3 +58,13 @@ export interface Candidate {
   isInactive: boolean;
   link: string;
 }
+
+export interface RecommendedCandidate {
+  znanijaId: number;
+  rank: string;
+  subjects: string[];
+  answersCount: number;
+  registeredAt: string;
+  nick: string;
+  avatar: string;
+}

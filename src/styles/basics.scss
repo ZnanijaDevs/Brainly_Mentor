@@ -62,3 +62,8 @@ a.link-with-cursor {
     cursor: pointer;
   }
 }
+
+[data-testid="game_box_brainly_tools_banner"],
+[data-testid="game_box_subscription_facade"] {
+  @include hidden;
+}

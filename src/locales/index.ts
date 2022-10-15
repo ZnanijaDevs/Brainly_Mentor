@@ -45,6 +45,8 @@ export default {
     "actionType": "Тип акции",
     "user": "Пользователь",
     "addMentor": "Добавить наставника",
+    "candidates": "Кандидаты",
+    "ans": "отв."
   },
   "errors": {
     "accountDeleted": "Аккаунт удален",
