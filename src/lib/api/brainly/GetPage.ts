@@ -23,7 +23,7 @@ export default async (
   }
 
   const htmlData = await res.text();
-  const doc = domParser.parseFromString(htmlData, "text/html");
+  const parsedDocument = domParser.parseFromString(htmlData, "text/html");
 
-  return doc;
+  return parsedDocument;
 };

@@ -11,10 +11,11 @@ const LOCALIZED_TYPES = locales.localizedActionTypes;
 
 export default async function GetBrainlyActions(
   userId: number, 
-  pageId: number
+  pageId: number,
+  limit: number
 ): Promise<GetActionsDataType> {
   const doc = await GetPage(
-    `/moderation_new/view_moderator/${userId}/page:${pageId}`
+    `/moderation_new/view_moderator/${userId}/page:${pageId}/limit:${limit}`
   );
 
   const actions: Action[] = [];

@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { useState, useEffect } from "react";
-import { Flex, Logo } from "brainly-style-guide";
+import { Flex, Logo, SeparatorVertical } from "brainly-style-guide";
 import { ErrorBoundary } from "react-error-boundary";
 
 import GetActions from "@brainly/GetActions";
@@ -13,6 +13,8 @@ import SelectWithMentees from "./components/common/SelectWithMentees";
 import ModeratorAvatar from "./components/common/ModeratorAvatar";
 import ErrorContainer from "./ErrorContainer";
 
+const DEFAULT_ACTIONS_LIMIT = 50;
+
 export default function App() {
   const [actions, setActions] = useState<GetActionsDataType>(null);
   const [error, setError] = useState<Error>(null);
@@ -20,15 +22,17 @@ export default function App() {
   const [pageId, setPageId] = useState(
     +window.location.href.match(/(?<=\/page:)\d+$/) || 1
   );
+  const [actionsLimit, setActionsLimit] = useState(DEFAULT_ACTIONS_LIMIT);
 
-  const fetchActions = (_pageId: number) => {
+  const fetchActions = (_pageId: number, _actionsLimit: number) => {
     if (actions) setActions(null);
 
     const userId = getUserId();
 
-    GetActions(userId, _pageId)
+    GetActions(userId, _pageId, _actionsLimit)
       .then(data => {
         setActions(data);
+        setActionsLimit(_actionsLimit);
 
         const newURL = `/moderation_new/view_moderator/${userId}/page:${_pageId}`;
         window.history.pushState(null, null, newURL);
@@ -38,7 +42,7 @@ export default function App() {
       .catch(err => setError(err));
   };
 
-  useEffect(() => fetchActions(pageId), []);
+  useEffect(() => fetchActions(pageId, actionsLimit), []);
   useEffect(() => {
     if (actions) setPageId(actions.pageId);
   }, [actions]);
@@ -46,7 +50,7 @@ export default function App() {
   if (error) return (
     <ErrorContainer error={error} onTryAgain={() => {
       setError(null);
-      fetchActions(pageId);
+      fetchActions(pageId, actionsLimit);
     }} /> 
   );
 
@@ -56,19 +60,21 @@ export default function App() {
         <ErrorContainer error={error} onTryAgain={resetErrorBoundary} />
       )}>
         <header>
-          <Flex justifyContent="space-between" alignItems="center">
+          <div>
             <Logo type="znanija" onClick={() => window.location.href = "/"} />
             <ActionsPagination 
               disabled={actions === null}
               hasMorePages={actions?.hasMore} 
               pageId={pageId} 
+              actionsLimit={actionsLimit}
               onChange={fetchActions} 
             />
+            <SeparatorVertical color="gray-40" />
             <Flex alignItems="center">
               <ModeratorAvatar />
               <SelectWithMentees />
             </Flex>
-          </Flex>
+          </div>
         </header>
         <main>
           <div id="actions-grid-container" className={clsx(!actions && "centered-container")}>

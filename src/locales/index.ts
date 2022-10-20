@@ -46,7 +46,8 @@ export default {
     "user": "Пользователь",
     "addMentor": "Добавить наставника",
     "candidates": "Кандидаты",
-    "ans": "отв."
+    "ans": "отв.",
+    "ofActions": "акций"
   },
   "errors": {
     "accountDeleted": "Аккаунт удален",

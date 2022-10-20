@@ -19,8 +19,13 @@ body {
   & > header {
     border-bottom: 2px solid #ebf2f7;
 
-    > .sg-flex {
+    > div {
       padding: 15px 18px;
+      display: grid;
+      align-content: center;
+      align-items: center;
+      grid-template-columns: auto 1fr auto auto auto;
+      justify-items: center;
 
       > .sg-flex {
         .sg-avatar {

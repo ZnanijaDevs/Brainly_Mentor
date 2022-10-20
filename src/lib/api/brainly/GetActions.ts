@@ -2,10 +2,12 @@ import BrainlyApi from ".";
 import type { GetActionsDataType } from "@typings";
 import GetBrainlyActions from "./GetBrainlyActions";
 
-export default async function GetActions(moderatorId: number, pageId: number): Promise<
-  GetActionsDataType
-> {
-  const data = await GetBrainlyActions(moderatorId, pageId);
+export default async function GetActions(
+  moderatorId: number,
+  pageId: number,
+  limit: number
+): Promise<GetActionsDataType> {
+  const data = await GetBrainlyActions(moderatorId, pageId, limit);
   const actions = data.actions;
 
   // Get extra data
