@@ -39,6 +39,14 @@ body {
           margin-left: 12px;
         }
       }
+
+      > .sg-flex:last-child {
+        @include hidden-if-mobile;
+      }
+
+      .sg-vertical-separator {
+        @include hidden-if-mobile;
+      }
     }
 
     .sg-logo {
@@ -57,20 +65,5 @@ body {
   > .sg-button {
     margin-top: 10px;
     margin-bottom: 15px;
-  }
-}
-
-#actions-pagination {
-  gap: 10px;
-
-  > .sg-icon {
-    cursor: pointer;
-    width: 20px;
-    height: 20px;
-
-    &[disabled] {
-      pointer-events: none;
-      opacity: 0.5;
-    }
   }
 }
