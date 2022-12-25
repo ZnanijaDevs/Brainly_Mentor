@@ -6,20 +6,35 @@ export type GetActionsDataType = {
   pageId: number;
 }
 
+export enum SuspensionType {
+  ONE_DAY = "24_hours",
+  THREE_DAYS = "72_hours",
+  PERMANENT = "permanent"
+}
+
+export type UserDataInAction = {
+  nick: string;
+  id: number;
+  link: string;
+} & Partial<{
+  isModerator: boolean;
+  avatar: string;
+  rank: string;
+  suspensionsCount: number;
+  warningsCount: number;
+  activeSuspension: {
+    issuer: string;
+    type: SuspensionType;
+  }
+}>;
+
 export interface Action {
   task: {
     id: number;
     link: string;
   };
   content: string;
-  user: {
-    nick: string;
-    id: number;
-    link: string;
-    isModerator?: boolean;
-    avatar?: string;
-    rank?: string;
-  };
+  user: UserDataInAction;
   date: string;
   reason: {
     id: number;
