@@ -10,7 +10,7 @@ import ZipPlugin from "zip-webpack-plugin";
 import makeEntries from "./build-scripts/makeEntries";
 import transformManifest from "./build-scripts/transformManifest";
 
-const isProd = process.env.NODE_ENV.trim() === "production";
+const isProd = process.env.NODE_ENV?.trim() === "production";
 
 const SRC_DIR = "./src";
 const OUT_DIR = `./build-${isProd ? "production" : "dev"}`;
@@ -60,9 +60,7 @@ const config: webpack.Configuration = {
 };
 
 if (isProd) {
-  config.plugins.push(
-    new ZipPlugin({ filename: "build.zip" })
-  );
+  config.plugins?.push(new ZipPlugin({ filename: "build.zip" }));
 
   config.optimization = {
     minimize: true,
