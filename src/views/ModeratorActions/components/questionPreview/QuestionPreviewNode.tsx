@@ -1,18 +1,15 @@
 import { Box, Flex, Text, Icon, Avatar, Link } from "brainly-style-guide";
 import replaceTextWithLinks from "@utils/replaceTextWithLinks";
 import locales from "@locales";
-import type { 
-  QuestionInGetQuestionResponse, 
-  AnswerInGetQuestionResponse  
-} from "@typings/responses";
+import type { BrainlyAnswer, BrainlyQuestion } from "@typings";
 
 export default function QuestionPreviewNode(props: {
-  node: QuestionInGetQuestionResponse | AnswerInGetQuestionResponse
+  node: BrainlyAnswer | BrainlyQuestion
 }) {
   let node = props.node;
 
   let isAnswer = !("link" in node);
-  let answer = node as AnswerInGetQuestionResponse;
+  let answer = node as BrainlyAnswer;
   let author = node.author;
 
   return (
@@ -39,7 +36,7 @@ export default function QuestionPreviewNode(props: {
           </Flex>
         </Flex>
         <Text className="sg-flex--margin-top-s" size="small" dangerouslySetInnerHTML={{
-          __html: replaceTextWithLinks(node.content.full)
+          __html: replaceTextWithLinks(node.full_content)
         }} />
         {node &&
           <Flex marginTop="s" alignItems="center" className="question-preview-content-box-attachments">

@@ -5,7 +5,7 @@ import { Button, Icon, Flex, Link, Text, Spinner } from "brainly-style-guide";
 import locales from "@locales";
 import _API from "@lib/api/extension";
 import flash from "@utils/flashes";
-import type { GetQuestionResponseDataType } from "@typings/responses";
+import type { BrainlyQuestion } from "@typings";
 
 import QuestionLog from "../questionLog/QuestionLog";
 import QuestionPreviewNode from "./QuestionPreviewNode";
@@ -16,12 +16,12 @@ export default function QuestionPreview(props: {
 }) {
   const modalRoot = document.getElementById("question-preview-modal-container");
 
-  const [questionData, setQuestionData] = useState<GetQuestionResponseDataType>(null);
+  const [question, setQuestion] = useState<BrainlyQuestion>(null);
   const [error, setError] = useState<Error>(null);
 
   useEffect(() => {
     _API.GetQuestion(props.id)
-      .then(data => setQuestionData(data))
+      .then(data => setQuestion(data))
       .catch(err => setError(err));
   }, []);
 
@@ -31,12 +31,10 @@ export default function QuestionPreview(props: {
     return;
   }
 
-  let question = questionData?.task;
-
   return createPortal(
     <div className="overlay">
       <div className="overlay-container">
-        {!questionData ? <Spinner /> : <Flex direction="column" fullHeight>
+        {!question ? <Spinner /> : <Flex direction="column" fullHeight>
           <Flex fullWidth justifyContent="space-between"className="question-preview-header">
             <Flex fullWidth alignItems="center">
               <Link color="text-black" target="_blank" href={`/task/${question.id}`}>
@@ -51,7 +49,7 @@ export default function QuestionPreview(props: {
           </Flex>
           <Flex direction="column">
             {[
-              question, ...questionData.responses
+              question, ...question.answers
             ].map(node =>
               <QuestionPreviewNode node={node} key={`node-${node.id}-${node.created}`} />
             )}

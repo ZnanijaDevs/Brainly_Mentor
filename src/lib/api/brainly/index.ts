@@ -3,7 +3,7 @@ import type {
   CommonResponse,
   GetConversationResponse,
   GetMessagesResponse
-} from "@typings/brainly";
+} from "@typings";
 
 class BrainlyApi {
   private graphqlPath = "/graphql/ru";

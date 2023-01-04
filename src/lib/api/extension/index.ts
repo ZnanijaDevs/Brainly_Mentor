@@ -1,8 +1,8 @@
 import type { Mentor, Candidate, RecommendedCandidate } from "@typings";
 import type { 
-  GetQuestionResponseDataType, 
-  QuestionLogEntriesByDateDataType,
-} from "@typings/responses";
+  BrainlyQuestion, 
+  QuestionLogEntriesByDate,
+} from "@typings";
 
 import locales from "@locales";
 import storage from "@lib/storage";
@@ -86,11 +86,11 @@ class Api {
     return await this.Req("GET", `candidates?limit=${limit}&ids=${ids.join(",")}`);
   }
 
-  async GetQuestion(id: number): Promise<GetQuestionResponseDataType> {
+  async GetQuestion(id: number): Promise<BrainlyQuestion> {
     return await this.Req("GET", `questions/${id}`);
   }
 
-  async GetQuestionLog(questionId: number): Promise<QuestionLogEntriesByDateDataType> {
+  async GetQuestionLog(questionId: number): Promise<QuestionLogEntriesByDate> {
     return await this.Req("GET", `questions/log/${questionId}`);
   }
 

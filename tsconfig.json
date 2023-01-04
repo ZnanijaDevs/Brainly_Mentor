@@ -10,7 +10,7 @@
     "resolveJsonModule": true,
     "paths": {
       "@locales": ["./locales"],
-      "@typings*": ["typings*", "typings"],
+      "@typings": ["typings"],
       "@lib/*": ["./lib/*"],
       "@utils/*": ["./utils/*"],
       "@assets/*": ["./assets/*"],

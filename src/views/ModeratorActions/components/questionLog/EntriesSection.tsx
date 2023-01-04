@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Flex, Text, Button, Icon } from "brainly-style-guide";
 
-import type { QuestionLogEntryDataType } from "@typings/responses";
+import type { QuestionLogEntry } from "@typings";
 import LogEntry from "./LogEntry";
 
 export default function EntriesSection(props: {
-  entries: QuestionLogEntryDataType[];
+  entries: QuestionLogEntry[];
   date: string;
 }) {
   const [visible, setVisible] = useState(true);

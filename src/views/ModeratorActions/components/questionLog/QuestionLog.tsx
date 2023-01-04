@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import { Flex, Headline, Spinner, Button, Icon } from "brainly-style-guide";
 
 import locales from "@locales";
-import type { QuestionLogEntriesByDateDataType } from "@typings/responses";
 import _API from "@lib/api/extension";
+import type { QuestionLogEntriesByDate } from "@typings";
 import EntriesSection from "./EntriesSection";
 
 export default function QuestionLog(props: {
   taskId: number;
 }) {
-  const [logEntries, setLogEntries] = useState<QuestionLogEntriesByDateDataType>(null);
+  const [logEntries, setLogEntries] = useState<QuestionLogEntriesByDate>(null);
   const [hidden, setHidden] = useState(
     !!JSON.parse(localStorage.getItem("questionLogHidden"))
   );

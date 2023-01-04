@@ -1,5 +1,49 @@
+import type { IconPropsType, IconType } from "brainly-style-guide";
+
+interface BrainlyUser {
+  nick: string;
+  id: number;
+  avatar?: string;
+  ranks: string[];
+  is_deleted?: boolean;
+  gender?: 1 | 2;
+}
+
+type GeneralNodeInGetQuestionResponse = {
+  attachments: string[];
+  created: string;
+  filtered_content: string;
+  full_content: string;
+  short_content: string;
+  author: BrainlyUser;
+  has_attachments: boolean;
+  id: number;
+  is_reported: boolean;
+  is_deleted: boolean;
+};
+
+export type BrainlyAnswer = GeneralNodeInGetQuestionResponse & {
+  is_approved: boolean;
+  is_best: boolean;
+  is_to_correct: boolean;
+}
+
+export type BrainlyQuestion = GeneralNodeInGetQuestionResponse & {
+  can_answer: boolean;
+  link: string;
+  points: number;
+  subject: string;
+  subject_id: number;
+  answers_count: number;
+  answers: BrainlyAnswer[];
+}
+
 export interface QuestionLogEntry {
-  class: 
+  descriptions: {
+    text: string;
+    title: string;
+  }[];
+  type: 
     | "accepted"
     | "added"
     | "best"
@@ -7,186 +51,68 @@ export interface QuestionLogEntry {
     | "edited"
     | "info"
     | "reported";
-  date: string;
-  descriptions?: {
-    subject: string;
-    text: string;
-  }[];
-  owner_id: number;
-  text: string;
   time: string;
-  type: number;
-  user_id: number;
-  warn: boolean;
+  text: string;
+  warn?: boolean;
+  owner?: BrainlyUser;
+  user?: BrainlyUser;
 }
 
-interface Attachment {
-  extension: string;
-  full: string;
-  hash: string;
-  id: number;
-  size: number;
-  thumbnail: string;
-  type: string;
+export type QuestionLogEntriesByDate = Record<string, QuestionLogEntry[]>;
+
+export type GetActionsDataType = {
+  actions: Action[];
+  hasMore: boolean;
+  pageId: number;
 }
 
-interface CommentsData {
-  items: {
-    can_mark_abuse: boolean;
-    content: string;
-    created: string;
-    deleted: boolean;
-    id: number;
-    is_marked_abuse: number;
-    user_id: number;
-  }[];
-  count: number;
-  last_id: number;
+export enum SuspensionType {
+  ONE_DAY = "24_hours",
+  THREE_DAYS = "72_hours",
+  PERMANENT = "permanent"
 }
 
-interface Avatar {
-  "64": string;
-  "100": string;
-}
-
-export interface Task {
-  attachments: Attachment[];
-  client_type: string;
-  content: string;
-  created: string;
-  first_resp?: string;
-  grade_id: number;
-  id: number;
-  points: {
-    ptsForTask: number;
-    ptsForResp: number;
-    ptsForBest: number;
-  };
-  responses: number;
-  source: string;
-  tickets: number;
-  user_category: number;
-  user_id: number;
-  the_best_resp_id?: number;
-  subject_id: number;
-  settings: {
-    [x in keyof {
-      "can_comment",
-      "can_edit",
-      "can_follow",
-      "can_mark_abuse",
-      "can_moderate",
-      "can_unfollow",
-      "is_answer_button",
-      "is_closed",
-      "is_confirmed",
-      "is_deleted",
-      "is_following",
-      "is_marked_abuse"
-    }]: boolean;
-  };
-  comments: CommentsData;
-}
-
-export interface Response {
-  approved: {
-    date?: string; 
-    approver?: {
-      id: number;
-      nickname: string;
-      points: number;
-      grade: number;
-      gender: number;
-      avatars: Avatar;
-      content_approved_count: number;
-    };
-  };
-  attachments: Attachment[];
-  best: boolean;
-  client_type: string;
-  comments: CommentsData;
-  content: string;
-  created: string;
-  id: number;
-  mark: number;
-  marks_count: number;
-  points: number;
-  settings: {
-    [x in keyof {
-      "can_comment",
-      "can_edit",
-      "can_mark_abuse",
-      "can_mark_as_best",
-      "can_moderate",
-      "is_confirmed",
-      "is_deleted",
-      "is_excellent",
-      "is_marked_abuse",
-      "is_to_correct"
-    }]: boolean;
-  };
-  source: string;
-  task_id: number;
-  thanks: number;
-  user_best_rank_id?: number;
-  user_id: number;
-}
-
-export interface QuestionData {
-  task: Task;
-  responses: Response[];
-}
-
-export interface User {
-  id: number;
+export type UserDataInAction = {
   nick: string;
-  gender: 1 | 2;
-  is_deleted: boolean;
-  stats: {
-    questions: number;
-    answers: number;
-    comments: number;
+  id: number;
+  link: string;
+} & Partial<{
+  isModerator: boolean;
+  avatar: string;
+  rank: string;
+  suspensionsCount: number;
+  warningsCount: number;
+  activeSuspension: {
+    issuer: string;
+    type: SuspensionType;
+  }
+}>;
+
+export interface Action {
+  task: {
+    id: number;
+    link: string;
   };
-  avatars: {
-    [x in keyof {64, 100}]?: string;
+  content: string;
+  user: UserDataInAction;
+  date: string;
+  reason: {
+    id: number;
+    fullText: string;
+    shortReason: string;
   };
-  ranks: {
-    color: string;
-    names: string[];
-    count: number;
-  };
-  ranks_ids: number[];
+  contentType: "answer" | "question" | "comment" | "attachment" | "unknown";
+  type: "DELETED" | "ACCEPTED" | "REPORTED_FOR_CORRECTION";
+  icon: IconType;
+  iconColor: IconPropsType["color"];
+  localizedType: string;
 }
 
-export type CommonResponse<T = unknown> = {
-  success: true;
-  users_data?: User[];
-  data: T;
-  impl?: string;
-  protocol?: "28";
-  schema?: string;
-};
-
-export type GetConversationResponse = CommonResponse<{
-  conversation_id: number;
-}>
-
-export type GetMessagesResponse = CommonResponse<{
-  last_id: number;
-  conversation: {
-    id: number;
-    user_id: number;
-    created: string;
-    recipient_id: number;
-    allow_link_from: unknown[];
-  };
-  messages: {
-    id: number;
-    conversation_id: number;
-    user_id: number;
-    created: string;
-    content: string;
-    is_harmful: boolean;
-    new: boolean;
-  }[];
-}>;
+export type Warn = {
+  time: string;
+  reason: string;
+  content: string;
+  taskId: number;
+  warner: string;
+  active: boolean;
+}

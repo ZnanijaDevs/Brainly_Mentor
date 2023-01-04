@@ -3,10 +3,10 @@ import { Flex, Button, Text, Icon, Link, IconPropsType, IconType } from "brainly
 
 import replaceTextWithLinks from "@utils/replaceTextWithLinks";
 import getShortDeleteReason from "@lib/getShortDeleteReason";
-import type { QuestionLogEntryDataType } from "@typings/responses";
+import type { QuestionLogEntry } from "@typings";
 import locales from "@locales";
 
-const ENTRY_ICONS: Record<QuestionLogEntryDataType["type"], {
+const ENTRY_ICONS: Record<QuestionLogEntry["type"], {
   color: IconPropsType["color"],
   type: IconType;
 }> = {
@@ -20,7 +20,7 @@ const ENTRY_ICONS: Record<QuestionLogEntryDataType["type"], {
 };
 
 export default function LogEntry(props: {
-  entry: QuestionLogEntryDataType;
+  entry: QuestionLogEntry;
 }) {
   const [detailsVisible, setDetailsVisible] = useState(false);
 
