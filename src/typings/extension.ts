@@ -1,7 +1,6 @@
 export interface Mentor {
-  _id: string;
-  isAdmin: boolean;
   id: number;
+  isAdmin: boolean;
   nick: string;
   avatar: string;
   senior: boolean;
@@ -16,7 +15,7 @@ export interface Candidate {
 }
 
 export interface RecommendedCandidate {
-  znanijaId: number;
+  id: number;
   rank: string;
   subjects: string[];
   answersCount: number;
