@@ -28,8 +28,8 @@ export default function MentorBox(props: {
 
     updateStateBeforeRequest();
 
-    _API.RemoveMentor(mentor.id)
-      .then(() => store.removeMentor(mentor.id))
+    _API.RemoveMentor(mentor.znanijaId)
+      .then(() => store.removeMentor(mentor.znanijaId))
       .catch(err => setError(err))
       .finally(() => setLoading(false));
   };
@@ -37,19 +37,19 @@ export default function MentorBox(props: {
   const updateMentor = (senior: boolean) => {
     updateStateBeforeRequest();
 
-    _API.UpdateMentor(mentor.id, { senior })
+    _API.UpdateMentor(mentor.znanijaId, { senior })
       .then(mentor => store.updateMentor(mentor))
       .catch(err => setError(err))
       .finally(() => setLoading(false));
   };
 
-  const isDisabled = store.mentor.id === mentor.id || loading;
+  const isDisabled = store.mentor.znanijaId === mentor.znanijaId || loading;
 
   return (
     <div className="mentor-box">
       <div>
         <Avatar size="s" imgSrc={mentor.avatar} />
-        <Link target="_blank" href={`/users/redirect_user/${mentor.id}`} weight="bold" breakWords>
+        <Link target="_blank" href={`/users/redirect_user/${mentor.znanijaId}`} weight="bold" breakWords>
           {mentor.nick}
         </Link>
         <Checkbox 

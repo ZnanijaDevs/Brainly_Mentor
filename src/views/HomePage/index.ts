@@ -42,7 +42,7 @@ class Homepage {
 
     for (let item of items) {
       const candidate = candidates.candidates.find(candidate =>
-        findUserId(item.querySelector("a:first-child")) === candidate.id
+        findUserId(item.querySelector("a:first-child")) === candidate.znanijaId
       );
       
       const candidateColor = /отказ/i.test(candidate?.status) ? "red" :

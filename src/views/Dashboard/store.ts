@@ -31,7 +31,7 @@ const useStore = createStore<AppState>((set) => ({
   removeMentor: (id: number) => set(prevState => {
     let mentors = prevState.mentors;
 
-    let newMentors = mentors.filter(x => x.id !== id);
+    let newMentors = mentors.filter(x => x.znanijaId !== id);
     return { mentors: newMentors };
   }),
   addMentor: (mentor: Mentor) => set(prevState => {
@@ -39,7 +39,7 @@ const useStore = createStore<AppState>((set) => ({
   }),
   updateMentor: (updatedMentor: Mentor) => set(prevState => {
     let allMentors = prevState.mentors;
-    let thisMentorIndex = allMentors.findIndex(x => x.id === updatedMentor.id);
+    let thisMentorIndex = allMentors.findIndex(x => x.znanijaId === updatedMentor.znanijaId);
 
     allMentors[thisMentorIndex] = updatedMentor;
 

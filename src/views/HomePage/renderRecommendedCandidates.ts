@@ -8,7 +8,7 @@ const renderCandidatesSection = (candidates: RecommendedCandidate[]) => {
     <img src="${candidate.avatar}">
     <div>
       <div class="candidate-info">
-        <a class="blue-bold-link" target="_blank" href="/users/redirect_user/${candidate.id}">
+        <a class="blue-bold-link" target="_blank" href="/users/redirect_user/${candidate.znanijaId}">
           ${candidate.nick}
         </a>
         <span> • ${candidate.rank}</span>

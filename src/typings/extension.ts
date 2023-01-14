@@ -1,13 +1,13 @@
 export interface Mentor {
-  id: number;
-  isAdmin: boolean;
+  znanijaId: number;
+  createdAt: string;
   nick: string;
   avatar: string;
   senior: boolean;
 }
 
 export interface Candidate {
-  id: number;
+  znanijaId: number;
   nick: string;
   status: string;
   isInactive: boolean;
@@ -15,7 +15,7 @@ export interface Candidate {
 }
 
 export interface RecommendedCandidate {
-  id: number;
+  znanijaId: number;
   rank: string;
   subjects: string[];
   answersCount: number;

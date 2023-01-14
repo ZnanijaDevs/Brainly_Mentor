@@ -19,7 +19,7 @@ export default function MentorsList() {
   return (
     <GridList 
       withMargin 
-      elements={mentors.map(mentor => <MentorBox key={`mentor-${mentor.id}`} mentor={mentor} />)} 
+      elements={mentors.map(mentor => <MentorBox key={`mentor-${mentor.znanijaId}`} mentor={mentor} />)} 
     />
   );
 }
