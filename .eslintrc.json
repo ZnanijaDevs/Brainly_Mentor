@@ -29,7 +29,7 @@
     "keyword-spacing": "error",
     "no-empty": "error",
     "prefer-const": "off",
-    "linebreak-style": ["error", "windows"],
+    "linebreak-style": "off",
     "semi": ["error", "always"],
     "no-console": [
       "warn", { 
