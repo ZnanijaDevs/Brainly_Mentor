@@ -1,4 +1,4 @@
-import createStore from "zustand";
+import { create } from "zustand";
 import type { Mentor } from "@typings";
 import type { MyMenteeDataType } from "@lib/GetMyMentees";
 
@@ -15,7 +15,7 @@ interface AppState {
   updateMentor: (mentor: Mentor) => void;
 }
 
-const useStore = createStore<AppState>((set) => ({
+const useStore = create<AppState>((set) => ({
   mentors: null,
   myMentees: null,
   mentor: null,
