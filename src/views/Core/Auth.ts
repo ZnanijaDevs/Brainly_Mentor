@@ -5,7 +5,7 @@ import flash from "@utils/flashes";
 
 storage.get("token").then(async token => {
   if (token) {
-    console.debug(`Mentor authed. Token: ${token}`);
+    console.debug("Mentor authed");
     return;
   }
 
