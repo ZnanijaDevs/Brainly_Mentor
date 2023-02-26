@@ -25,4 +25,5 @@ npm install
 npm run dev
 ```
 This command will create a build folder that contains the extension files.
+
 5. Install the extension in your browser
