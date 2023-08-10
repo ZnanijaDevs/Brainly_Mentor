@@ -10,7 +10,7 @@ import storage from "@lib/storage";
 const ERRORS = locales.errors;
 
 class Api {
-  private serverUrl = "https://mentors-v2.br-helper.com";
+  private serverUrl = "https://znanija-mentors-server-srv1.fly.dev";
   private authToken: string;
 
   get serverURL() {
